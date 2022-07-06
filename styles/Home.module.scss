@@ -1,0 +1,22 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+
+  &__container {
+    margin: auto;
+  }
+
+  &__title {
+    padding-bottom: 5rem;
+  }
+
+  &__buttons {
+    button {
+      margin-left: 2rem;
+    }
+  }
+}
