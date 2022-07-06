@@ -1,0 +1,17 @@
+.cell {
+  background: black;
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid white;
+
+  &:hover {
+    background: red;
+  }
+
+  &__clicked {
+    background: blue;
+    width: 4rem;
+    height: 4rem;
+    border: 1px solid white;
+  }
+}

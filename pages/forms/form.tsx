@@ -1,10 +1,13 @@
 import React from 'react';
-import Text from '../../Components/Text'
+import Grid from '../../Components/Grid';
+import styles from '../../styles/Home.module.scss';
 
 const form = () => {
-  return <div>
-    <Text msg="test" nr={1}/>
-  </div>;
+  return (
+    <div className={styles.home}>
+      <Grid mapSize={10} />
+    </div>
+  );
 };
 
 export default form;
