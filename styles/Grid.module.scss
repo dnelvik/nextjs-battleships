@@ -2,3 +2,12 @@
   display: flex;
   margin: auto;
 }
+
+.ship-buttons-container {
+  display: flex;
+  padding: 2rem;
+
+  & > * {
+    margin-right: 1rem;
+  }
+}

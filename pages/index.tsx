@@ -6,7 +6,7 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push('/forms/form');
+    router.push('/battleships');
   };
 
   return (

@@ -1,11 +1,19 @@
 .cell {
-  background: black;
   width: 4rem;
   height: 4rem;
   border: 1px solid white;
 
-  &:hover {
+  &__clean {
+    background: black;
+    width: 4rem;
+    height: 4rem;
+  }
+
+  &__hover {
     background: red;
+    width: 4rem;
+    height: 4rem;
+    cursor: pointer;
   }
 
   &__clicked {
