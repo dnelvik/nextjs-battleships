@@ -5,7 +5,7 @@ import {
   setPlacementConfirmed,
   setShipType,
 } from '../store/slices/gameStateSlice';
-import {sizes} from "../store/types";
+import { sizes } from '../store/types';
 
 const ShipSelection = () => {
   const dispatch = useDispatch();

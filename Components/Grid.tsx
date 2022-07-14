@@ -4,6 +4,7 @@ import styles from '../styles/Grid.module.scss';
 import { useDispatch, useSelector } from '../store/store';
 import {
   getShipType,
+  setHoveredCell,
   setLargeShipsPlayer1,
   setMediumShipsPlayer1,
   setSmallShipsPlayer1,
@@ -43,8 +44,9 @@ const Grid = ({ mapSize }: Props) => {
   const dispatch = useDispatch();
   const shipType = useSelector(getShipType);
   const initialClicked: Coordinates = { x: -1, y: -1 };
+  const initialActive: Coordinates[] = [{ x: -1, y: -1 }];
   const [clickedCell, setClickedCell] = React.useState(initialClicked);
-  const [activeCells, setActiveCells] = React.useState([{}]);
+  const [activeCells, setActiveCells] = React.useState(initialActive);
 
   const grid = createGrid(mapSize, setClickedCell, clickedCell, activeCells);
 
@@ -60,21 +62,11 @@ const Grid = ({ mapSize }: Props) => {
 
   React.useMemo(() => {
     if (clickedCell) {
-      /*      const newArr = Array.from(Array.from({length: shipType.sizeNum}, (v, i) => i)).map((e, idx) => [
-              {
-                x: clickedCell?.x,
-                y: clickedCell?.y,
-              },
-              {
-                x: clickedCell.x,
-                y: clickedCell.y - idx,
-              }],
-            );*/
       let newArr = [];
       for (let i = 0; i < shipType.sizeNum; i++) {
         newArr.push({
           x: clickedCell?.x,
-          y: clickedCell?.y && clickedCell.y - i,
+          y: clickedCell.y - shipType.sizeNum < 0 ? i : clickedCell.y - i,
         });
       }
       const setCell: Ship = {
@@ -88,7 +80,9 @@ const Grid = ({ mapSize }: Props) => {
   }, [clickedCell]);
 
   return (
-    <div className={styles.grid}>
+    <div
+      className={styles.grid}
+      onMouseLeave={() => dispatch(setHoveredCell(undefined))}>
       {grid.map((e, idx) => {
         return <div key={idx}>{e}</div>;
       })}

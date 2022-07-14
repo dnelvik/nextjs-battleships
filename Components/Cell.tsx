@@ -8,7 +8,7 @@ import {
   getShipType,
   setHoveredCell,
 } from '../store/slices/gameStateSlice';
-import {CellType, Coordinates, sizes} from '../store/types';
+import { CellType, Coordinates, sizes } from '../store/types';
 
 interface Props {
   x: number;
@@ -30,7 +30,9 @@ const Cell = ({ x, y, setClickedCell, clickedCell, activeCells }: Props) => {
   React.useMemo(() => {
     if (
       clickedCell?.x === x &&
-      sizes[shipType?.sizeName]?.includes(clickedCell.y - y) &&
+      (sizes[shipType?.sizeName]?.includes(clickedCell.y - y) ||
+        (clickedCell.y + 1 - shipType.sizeNum < 0 &&
+          sizes[shipType?.sizeName].includes(y))) &&
       !isClicked
     ) {
       setIsClicked(true);
@@ -40,7 +42,9 @@ const Cell = ({ x, y, setClickedCell, clickedCell, activeCells }: Props) => {
   React.useMemo(() => {
     if (
       hoveredCell?.x === x &&
-      sizes[shipType?.sizeName]?.includes(hoveredCell.y - y)
+      (sizes[shipType?.sizeName]?.includes(hoveredCell.y - y) ||
+        (hoveredCell.y + 1 - shipType.sizeNum < 0 &&
+          sizes[shipType?.sizeName].includes(y)))
     ) {
       setIsHovered(true);
     } else {
@@ -49,6 +53,9 @@ const Cell = ({ x, y, setClickedCell, clickedCell, activeCells }: Props) => {
   }, [hoveredCell]);
 
   const onClick = () => {
+    if (y - shipType.sizeNum < 0) {
+      // return;
+    }
     setClickedCell({ x, y });
     if (phase === 'Placement') {
     }
