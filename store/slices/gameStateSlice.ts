@@ -121,6 +121,11 @@ export const getBlocked = (state: { gameState: GameState }) =>
   state.gameState.blocked;
 export const getPlacementConfirmed = (state: { gameState: GameState }) =>
   state.gameState.placementConfirmed;
+export const getAllActiveCells = (state: { gameState: GameState }) => {
+  return state.gameState.player1.smallShip.cells
+    .concat(state.gameState.player1.mediumShip.cells)
+    .concat(state.gameState.player1.largeShip.cells);
+};
 
 // Exports all actions
 export const {

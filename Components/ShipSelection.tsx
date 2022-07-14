@@ -5,18 +5,13 @@ import {
   setPlacementConfirmed,
   setShipType,
 } from '../store/slices/gameStateSlice';
-
-export enum ShipSize {
-  'Small' = 2,
-  'Medium' = 3,
-  'Large' = 4,
-}
+import {sizes} from "../store/types";
 
 const ShipSelection = () => {
   const dispatch = useDispatch();
 
   const onClick = (size: 'Small' | 'Medium' | 'Large') => {
-    dispatch(setShipType({ sizeName: size, sizeNum: ShipSize[size] }));
+    dispatch(setShipType({ sizeName: size, sizeNum: sizes[size].length }));
   };
 
   const confirmPlacement = () => {

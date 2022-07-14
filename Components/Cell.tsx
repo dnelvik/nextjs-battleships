@@ -2,13 +2,13 @@ import React from 'react';
 import styles from '../styles/Cell.module.scss';
 import { useDispatch, useSelector } from '../store/store';
 import {
-  getClickedCell,
+  getAllActiveCells,
   getHoveredCell,
   getPhase,
   getShipType,
   setHoveredCell,
 } from '../store/slices/gameStateSlice';
-import { Coordinates } from '../store/types';
+import {CellType, Coordinates, sizes} from '../store/types';
 
 interface Props {
   x: number;
@@ -18,38 +18,30 @@ interface Props {
   activeCells: Coordinates[] | undefined;
 }
 
-const sizes = {
-  Small: [0, 1],
-  Medium: [0, 1, 2],
-  Large: [0, 1, 2, 3],
-};
-
 const Cell = ({ x, y, setClickedCell, clickedCell, activeCells }: Props) => {
   const dispatch = useDispatch();
   const phase = useSelector(getPhase);
   const shipType = useSelector(getShipType);
   const hoveredCell = useSelector(getHoveredCell);
+  const allActiveCell = useSelector(getAllActiveCells);
   const [isClicked, setIsClicked] = React.useState(false);
   const [isHovered, setIsHovered] = React.useState(false);
 
   React.useMemo(() => {
-    if ({ x, y } === activeCells) {
-      setIsClicked(true);
-      console.log('worked');
-    }
     if (
       clickedCell?.x === x &&
-      sizes[shipType?.sizeName]?.includes(clickedCell?.y - y) &&
+      sizes[shipType?.sizeName]?.includes(clickedCell.y - y) &&
       !isClicked
     ) {
       setIsClicked(true);
     }
   }, [activeCells]);
 
-  React.useEffect(() => {
-    if (hoveredCell?.x !== x) {
-      setIsHovered(false);
-    } else if (sizes[shipType?.sizeName]?.includes(hoveredCell?.y - y)) {
+  React.useMemo(() => {
+    if (
+      hoveredCell?.x === x &&
+      sizes[shipType?.sizeName]?.includes(hoveredCell.y - y)
+    ) {
       setIsHovered(true);
     } else {
       setIsHovered(false);
@@ -63,12 +55,18 @@ const Cell = ({ x, y, setClickedCell, clickedCell, activeCells }: Props) => {
   };
 
   const setStyle = () => {
-    if (isClicked) {
+    const currentCell: CellType = { coordinates: { x, y } };
+    const activeCellsLonger: boolean =
+      allActiveCell?.filter(
+        (e) => JSON.stringify(currentCell) === JSON.stringify(e)
+      ).length > 0;
+    if (isClicked && activeCellsLonger) {
       return styles.cell__clicked;
     } else if (isHovered) {
       return styles.cell__hover;
+    } else {
+      return styles.cell__clean;
     }
-    return styles.cell__clean;
   };
 
   const onHover = (enter: boolean) => {

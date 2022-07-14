@@ -4,9 +4,11 @@ import styles from '../styles/Grid.module.scss';
 import { useDispatch, useSelector } from '../store/store';
 import {
   getShipType,
+  setLargeShipsPlayer1,
+  setMediumShipsPlayer1,
   setSmallShipsPlayer1,
 } from '../store/slices/gameStateSlice';
-import { CellType, Coordinates } from '../store/types';
+import { Coordinates, Ship } from '../store/types';
 
 interface Props {
   mapSize: number;
@@ -40,34 +42,48 @@ const createGrid = (
 const Grid = ({ mapSize }: Props) => {
   const dispatch = useDispatch();
   const shipType = useSelector(getShipType);
-  const [clickedCell, setClickedCell] = React.useState({});
+  const initialClicked: Coordinates = { x: -1, y: -1 };
+  const [clickedCell, setClickedCell] = React.useState(initialClicked);
   const [activeCells, setActiveCells] = React.useState([{}]);
 
   const grid = createGrid(mapSize, setClickedCell, clickedCell, activeCells);
 
-  React.useEffect(() => {
-    if (clickedCell) {
-      // const newArr = Array(shipType.sizeNum).map((e, idx) => )
+  const setMethod = (cell: Ship) => {
+    if (shipType?.sizeName === 'Small') {
+      dispatch(setSmallShipsPlayer1(cell));
+    } else if (shipType?.sizeName === 'Medium') {
+      dispatch(setMediumShipsPlayer1(cell));
+    } else if (shipType?.sizeName === 'Large') {
+      dispatch(setLargeShipsPlayer1(cell));
+    }
+  };
 
-      const newActiveCells = [
-        {
+  React.useMemo(() => {
+    if (clickedCell) {
+      /*      const newArr = Array.from(Array.from({length: shipType.sizeNum}, (v, i) => i)).map((e, idx) => [
+              {
+                x: clickedCell?.x,
+                y: clickedCell?.y,
+              },
+              {
+                x: clickedCell.x,
+                y: clickedCell.y - idx,
+              }],
+            );*/
+      let newArr = [];
+      for (let i = 0; i < shipType.sizeNum; i++) {
+        newArr.push({
           x: clickedCell?.x,
-          y: clickedCell?.y,
-        },
-        {
-          x: clickedCell.x,
-          y: clickedCell.y - 1,
-        },
-      ];
-      setActiveCells(newActiveCells);
-      dispatch(
-        setSmallShipsPlayer1({
-          cells: newActiveCells.map((e) => {
-            return { coordinates: e, isHit: false };
-          }),
-          isSunk: false,
-        })
-      );
+          y: clickedCell?.y && clickedCell.y - i,
+        });
+      }
+      const setCell: Ship = {
+        cells: newArr.map((e) => {
+          return { coordinates: e };
+        }),
+      };
+      setMethod(setCell);
+      setActiveCells(newArr);
     }
   }, [clickedCell]);
 
