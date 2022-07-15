@@ -20,12 +20,12 @@ export type Ship = {
 };
 
 export type ShipType = {
-  sizeName: 'Small' | 'Medium' | 'Large';
+  sizeName: 'smallShip' | 'mediumShip' | 'largeShip';
   sizeNum: number;
 };
 
 export const sizes = {
-  Small: [0, 1],
-  Medium: [0, 1, 2],
-  Large: [0, 1, 2, 3],
+  smallShip: [0, 1],
+  mediumShip: [0, 1, 2],
+  largeShip: [0, 1, 2, 3],
 };

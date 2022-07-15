@@ -105,6 +105,12 @@ export const getShipsPlayer1 = (state: { gameState: GameState }) =>
   state.gameState.player1;
 export const getShipsPlayer2 = (state: { gameState: GameState }) =>
   state.gameState.player2;
+export const getSpecifiedShip = (
+  state: { gameState: GameState },
+  ship: string
+) =>
+  // @ts-ignore
+  state.gameState.player1[ship];
 export const getPlayersTurn = (state: { gameState: GameState }) =>
   state.gameState.playersTurn;
 export const getPhase = (state: { gameState: GameState }) =>

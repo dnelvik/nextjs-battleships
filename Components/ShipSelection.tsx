@@ -10,7 +10,7 @@ import { sizes } from '../store/types';
 const ShipSelection = () => {
   const dispatch = useDispatch();
 
-  const onClick = (size: 'Small' | 'Medium' | 'Large') => {
+  const onClick = (size: 'smallShip' | 'mediumShip' | 'largeShip') => {
     dispatch(setShipType({ sizeName: size, sizeNum: sizes[size].length }));
   };
 
@@ -20,13 +20,13 @@ const ShipSelection = () => {
 
   return (
     <div className={styles.shipButtonsContainer}>
-      <button className="btn btn-primary" onClick={() => onClick('Small')}>
+      <button className="btn btn-primary" onClick={() => onClick('smallShip')}>
         Small Ship
       </button>
-      <button className="btn btn-primary" onClick={() => onClick('Medium')}>
+      <button className="btn btn-primary" onClick={() => onClick('mediumShip')}>
         Medium Ship
       </button>
-      <button className="btn btn-primary" onClick={() => onClick('Large')}>
+      <button className="btn btn-primary" onClick={() => onClick('largeShip')}>
         Large Ship
       </button>
       <button className="btn btn-primary" onClick={confirmPlacement}>

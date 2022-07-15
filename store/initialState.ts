@@ -27,7 +27,7 @@ export const initialState: GameState = {
   blocked: false,
   placementConfirmed: false,
   shipType: {
-    sizeName: 'Small',
+    sizeName: 'smallShip',
     sizeNum: 2,
   },
 };
