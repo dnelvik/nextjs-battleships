@@ -18,14 +18,21 @@ export const doesShipsOverlap = (ship1: Ship, ship2: Ship) => {
   );
 };
 
-export const checkIfCellIsIncluded = (
-  cell: Coordinates,
+export const doesShipsContainCoordinates = (ship: Ship, coord: Coordinates) => {
+  if (!ship || !coord) {
+    return;
+  }
+  return ship.cells.some((e) => equalCoordinates(e.coordinates, coord));
+};
+
+export const checkIfCellIsIncludedInShip = (
+  clickedCell: Coordinates,
   currentCell: Coordinates,
   shipType: ShipType
 ) => {
   return (
-    sizes[shipType?.sizeName]?.includes(cell.y - currentCell.y) ||
-    (cell.y + 1 - shipType.sizeNum < 0 &&
+    sizes[shipType?.sizeName]?.includes(clickedCell.y - currentCell.y) ||
+    (clickedCell.y + 1 - shipType.sizeNum < 0 &&
       sizes[shipType?.sizeName]?.includes(currentCell.y))
   );
 };

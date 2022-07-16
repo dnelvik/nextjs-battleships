@@ -13,6 +13,7 @@ export interface GameState {
   clickedCell: Coordinates | undefined;
   blocked: boolean;
   placementConfirmed: boolean;
+  isPlacing: boolean;
 }
 
 export const gameStateSlice = createSlice({
@@ -97,6 +98,12 @@ export const gameStateSlice = createSlice({
     ) => {
       state.placementConfirmed = action.payload;
     },
+    setIsPlacing: (
+      state: Draft<typeof initialState>,
+      action: PayloadAction<typeof initialState.isPlacing>
+    ) => {
+      state.isPlacing = action.payload;
+    },
   },
 });
 
@@ -132,6 +139,9 @@ export const getAllActiveCells = (state: { gameState: GameState }) => {
     .concat(state.gameState.player1.mediumShip.cells)
     .concat(state.gameState.player1.largeShip.cells);
 };
+export const getIsPlacing = (state: { gameState: GameState }) => {
+  return state.gameState.isPlacing;
+};
 
 // Exports all actions
 export const {
@@ -148,6 +158,7 @@ export const {
   setHoveredCell,
   setBlocked,
   setPlacementConfirmed,
+  setIsPlacing,
 } = gameStateSlice.actions;
 
 export default gameStateSlice.reducer;

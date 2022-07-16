@@ -5,19 +5,26 @@
 
   &__clean {
     background: black;
-    width: 4rem;
-    height: 4rem;
+    width: 102%;
+    height: 105%;
   }
 
   &__hover {
-    background: red;
-    width: 4rem;
-    height: 4rem;
+    background: green;
+    width: 102%;
+    height: 105%;
     cursor: pointer;
   }
 
   &__clicked {
     background: blue;
+    width: 102%;
+    height: 105%;
+    border: 1px solid white;
+  }
+
+  &__blocked {
+    background: red;
     width: 4rem;
     height: 4rem;
     border: 1px solid white;

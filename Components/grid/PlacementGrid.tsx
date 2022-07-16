@@ -1,24 +1,23 @@
 import React from 'react';
-import Cell from './Cell';
-import styles from '../styles/Grid.module.scss';
-import { useDispatch, useSelector } from '../store/store';
+import { useDispatch, useSelector } from '../../store/store';
 import {
   getAllActiveCells,
   getShipsPlayer1,
   getShipType,
-  setHoveredCell,
   setLargeShipsPlayer1,
   setMediumShipsPlayer1,
   setSmallShipsPlayer1,
-} from '../store/slices/gameStateSlice';
-import { Coordinates, Ship } from '../store/types';
-import { doesShipsOverlap, equalCoordinates } from '../util/Utils';
+} from '../../store/slices/gameStateSlice';
+import { Coordinates, Ship } from '../../store/types';
+import { doesShipsOverlap, equalCoordinates } from '../../util/Utils';
+import PlacementCell from '../cell/PlacementCell';
+import GridRenderer from './GridRenderer';
 
 interface Props {
   mapSize: number;
 }
 
-const createGrid = (
+const createPlacementGrid = (
   mapSize: number,
   setShips: any,
   clickedCell: Coordinates | undefined,
@@ -29,7 +28,7 @@ const createGrid = (
     gridArray[x] = Array(mapSize);
     for (let y = 0; y < mapSize; y++) {
       gridArray[x][y] = (
-        <Cell
+        <PlacementCell
           key={`${x}${y}`}
           x={x}
           y={y}
@@ -43,7 +42,7 @@ const createGrid = (
   return gridArray;
 };
 
-const Grid = ({ mapSize }: Props) => {
+const PlacementGrid = ({ mapSize }: Props) => {
   const dispatch = useDispatch();
   const shipType = useSelector(getShipType);
   const player = useSelector(getShipsPlayer1);
@@ -53,9 +52,14 @@ const Grid = ({ mapSize }: Props) => {
   const [clickedCell, setClickedCell] = React.useState(initialClicked);
   const [activeCells, setActiveCells] = React.useState(initialActive);
 
-  const grid = createGrid(mapSize, setClickedCell, clickedCell, activeCells);
+  const grid = createPlacementGrid(
+    mapSize,
+    setClickedCell,
+    clickedCell,
+    activeCells
+  );
 
-  const setMethod = (cell: Ship) => {
+  const saveShipPlacementToStore = (cell: Ship) => {
     const currentShip = player[shipType?.sizeName];
     if (
       !doesShipsOverlap(currentShip, cell) &&
@@ -88,20 +92,16 @@ const Grid = ({ mapSize }: Props) => {
           return { coordinates: e };
         }),
       };
-      setMethod(setCell);
+      saveShipPlacementToStore(setCell);
       setActiveCells(newArr);
     }
   }, [clickedCell]);
 
   return (
-    <div
-      className={styles.grid}
-      onMouseLeave={() => dispatch(setHoveredCell(undefined))}>
-      {grid.map((e, idx) => {
-        return <div key={idx}>{e}</div>;
-      })}
-    </div>
+    <>
+      <GridRenderer grid={grid} />
+    </>
   );
 };
 
-export default Grid;
+export default PlacementGrid;

@@ -10,5 +10,6 @@
         "argsIgnorePattern": "^_"
       }
     ]
-  }
+  },
+  "plugins": ["unused-imports"]
 }
