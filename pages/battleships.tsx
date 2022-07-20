@@ -5,20 +5,21 @@ import PlacementGrid from '../Components/grid/PlacementGrid';
 import EnemyGrid from '../Components/grid/EnemyGrid';
 import { setPhase, setPlayer } from '../store/slices/gameStateSlice';
 import { useDispatch } from '../store/store';
+import { DatabaseType } from '../util/types';
 
 interface Props {
-  test: any;
+  playerData: DatabaseType;
 }
 
-const Battleships = ({ test }: Props) => {
+const Battleships = ({ playerData }: Props) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    if (test) {
-      dispatch(setPlayer(test[0].ships));
+    if (playerData) {
+      dispatch(setPlayer(playerData.ships));
       dispatch(setPhase('Attack'));
     }
-  }, [test]);
+  }, [playerData]);
 
   return (
     <div className={styles.home}>
@@ -35,7 +36,7 @@ export async function getServerSideProps(ctx: any) {
     `http://localhost:3000/api/restapi/?gameName=${gameName}&playerName=${playerName}`
   );
   const data = await res.json();
-  return { props: { test: data } };
+  return { props: { playerData: data[0] } };
 }
 
 export default Battleships;

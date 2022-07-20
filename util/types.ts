@@ -25,10 +25,9 @@ export type ShipType = {
   sizeNum: number;
 };
 
-export type Data = {
-  _id?: number;
-  name: string;
-  playerShips: Player;
+export type DatabaseType = {
+  gameName: string;
+  ships: Player;
   playersTurn: boolean;
 };
 
