@@ -4,15 +4,17 @@ import { useDispatch, useSelector } from '../../store/store';
 import {
   getAllActiveCells,
   getBlocked,
-  getHoveredCell,
+  getHoveredPlacementCell,
   getIsPlacing,
-  getShipsPlayer1,
+  getRotateX,
+  getPlayer,
   getShipType,
   setBlocked,
-  setHoveredCell,
+  setHoveredPlacementCell,
   setIsPlacing,
+  getPhase,
 } from '../../store/slices/gameStateSlice';
-import { CellType, Coordinates } from '../../store/types';
+import { CellType, Coordinates } from '../../util/types';
 import {
   checkIfCellIsIncludedInShip,
   doesShipsContainCoordinates,
@@ -37,10 +39,12 @@ const PlacementCell = ({
 }: Props) => {
   const dispatch = useDispatch();
   const shipType = useSelector(getShipType);
-  const hoveredCell = useSelector(getHoveredCell);
+  const hoveredCell = useSelector(getHoveredPlacementCell);
   const blocked = useSelector(getBlocked);
-  const player = useSelector(getShipsPlayer1);
+  const player = useSelector(getPlayer);
   const isPlacing = useSelector(getIsPlacing);
+  const phase = useSelector(getPhase);
+  const rotateX = useSelector(getRotateX);
   const allActiveCells = useSelector(getAllActiveCells);
   const [isClicked, setIsClicked] = React.useState(false);
   const [isHovered, setIsHovered] = React.useState(false);
@@ -51,17 +55,30 @@ const PlacementCell = ({
     currentCell.coordinates
   );
 
+  // Sets active cells to clicked if game is already active
+  React.useEffect(() => {
+    if (phase === 'Attack') {
+      const currentCellIsActive: boolean =
+        allActiveCells?.filter((e) =>
+          equalCoordinates(currentCell.coordinates, e.coordinates)
+        ).length > 0;
+      currentCellIsActive && setIsClicked(true);
+    }
+  }, [player]);
+
+  // Sets cell to clicked if included
   React.useMemo(() => {
     const currentCellIsActive: boolean =
       allActiveCells?.filter((e) =>
         equalCoordinates(currentCell.coordinates, e.coordinates)
       ).length > 0;
     if (
-      clickedCell?.x === x &&
+      clickedCell &&
       checkIfCellIsIncludedInShip(
+        shipType,
         clickedCell,
         currentCell.coordinates,
-        shipType
+        rotateX
       ) &&
       !isClicked
     ) {
@@ -72,13 +89,15 @@ const PlacementCell = ({
     }
   }, [activeCells]);
 
+  // Sets cell to hovered if included
   React.useMemo(() => {
     if (
-      hoveredCell?.x === x &&
+      hoveredCell &&
       checkIfCellIsIncludedInShip(
+        shipType,
         hoveredCell,
         currentCell.coordinates,
-        shipType
+        rotateX
       )
     ) {
       setIsHovered(true);
@@ -113,7 +132,7 @@ const PlacementCell = ({
 
   const onHover = (enter: boolean) => {
     if (enter) {
-      dispatch(setHoveredCell(currentCell.coordinates));
+      dispatch(setHoveredPlacementCell(currentCell.coordinates));
     } else {
       dispatch(setBlocked(false));
       dispatch(setIsPlacing(false));

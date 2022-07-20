@@ -2,13 +2,14 @@ import React from 'react';
 import { useDispatch, useSelector } from '../../store/store';
 import {
   getAllActiveCells,
-  getShipsPlayer1,
+  getRotateX,
+  getPlayer,
   getShipType,
-  setLargeShipsPlayer1,
-  setMediumShipsPlayer1,
-  setSmallShipsPlayer1,
+  setLargeShipsPlayer,
+  setMediumShipsPlayer,
+  setSmallShipsPlayer,
 } from '../../store/slices/gameStateSlice';
-import { Coordinates, Ship } from '../../store/types';
+import { Coordinates, Ship } from '../../util/types';
 import { doesShipsOverlap, equalCoordinates } from '../../util/Utils';
 import PlacementCell from '../cell/PlacementCell';
 import GridRenderer from './GridRenderer';
@@ -45,8 +46,9 @@ const createPlacementGrid = (
 const PlacementGrid = ({ mapSize }: Props) => {
   const dispatch = useDispatch();
   const shipType = useSelector(getShipType);
-  const player = useSelector(getShipsPlayer1);
+  const player = useSelector(getPlayer);
   const allActiveCells = useSelector(getAllActiveCells);
+  const rotateX = useSelector(getRotateX);
   const initialClicked: Coordinates = { x: -1, y: -1 };
   const initialActive: Coordinates[] = [{ x: -1, y: -1 }];
   const [clickedCell, setClickedCell] = React.useState(initialClicked);
@@ -70,21 +72,30 @@ const PlacementGrid = ({ mapSize }: Props) => {
       return;
     }
     if (shipType?.sizeName === 'smallShip') {
-      dispatch(setSmallShipsPlayer1(cell));
+      dispatch(setSmallShipsPlayer(cell));
     } else if (shipType?.sizeName === 'mediumShip') {
-      dispatch(setMediumShipsPlayer1(cell));
+      dispatch(setMediumShipsPlayer(cell));
     } else if (shipType?.sizeName === 'largeShip') {
-      dispatch(setLargeShipsPlayer1(cell));
+      dispatch(setLargeShipsPlayer(cell));
     }
   };
 
   React.useMemo(() => {
     if (clickedCell) {
+      // Create an array with all cell position based off coordinates of clicked cell and size/rotation of chosen ship
       let newArr: Coordinates[] = [];
       for (let i = 0; i < shipType.sizeNum; i++) {
         newArr.push({
-          x: clickedCell?.x,
-          y: clickedCell.y - shipType.sizeNum < 0 ? i : clickedCell.y - i,
+          x: rotateX
+            ? clickedCell.x - shipType.sizeNum < 0
+              ? i
+              : clickedCell.x - i
+            : clickedCell.x,
+          y: rotateX
+            ? clickedCell.y
+            : clickedCell.y - shipType.sizeNum < 0
+            ? i
+            : clickedCell.y - i,
         });
       }
       const setCell: Ship = {

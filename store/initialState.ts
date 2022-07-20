@@ -1,7 +1,8 @@
 import { GameState } from './slices/gameStateSlice';
-import { PlayerShips } from './types';
+import { Player } from '../util/types';
 
-const initialPlayer: PlayerShips = {
+const initialPlayer: Player = {
+  playerName: '',
   smallShip: {
     cells: [],
     isSunk: false,
@@ -17,17 +18,19 @@ const initialPlayer: PlayerShips = {
 };
 
 export const initialState: GameState = {
-  player1: initialPlayer,
-  player2: initialPlayer,
+  player: initialPlayer,
   playersTurn: true,
   phase: 'Placement',
-  grid: undefined,
-  clickedCell: undefined,
-  hoveredCell: undefined,
-  blocked: false,
-  placementConfirmed: false,
   shipType: {
     sizeName: 'smallShip',
     sizeNum: 2,
   },
+  hoveredPlacementCell: undefined,
+  hoveredAttackCell: undefined,
+  clickedPlacementCell: undefined,
+  clickedAttackCell: undefined,
+  blocked: false,
+  placementConfirmed: false,
+  isPlacing: false,
+  rotateX: false,
 };

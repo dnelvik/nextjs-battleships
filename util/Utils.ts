@@ -1,4 +1,4 @@
-import { Coordinates, Ship, ShipType, sizes } from '../store/types';
+import { Coordinates, Ship, ShipType, sizes } from './types';
 
 export const equalCoordinates = (
   coords1: Coordinates,
@@ -26,13 +26,19 @@ export const doesShipsContainCoordinates = (ship: Ship, coord: Coordinates) => {
 };
 
 export const checkIfCellIsIncludedInShip = (
-  clickedCell: Coordinates,
+  shipType: ShipType,
+  activeCell: Coordinates,
   currentCell: Coordinates,
-  shipType: ShipType
+  rotateX: boolean
 ) => {
+  const clickedCellAngle = rotateX ? activeCell?.x : activeCell?.y;
+  const currentCellAngle = rotateX ? currentCell.x : currentCell.y;
+  const clickedCellOtherAngle = !rotateX ? activeCell?.x : activeCell?.y;
+  const currentCellOtherAngle = !rotateX ? currentCell.x : currentCell.y;
   return (
-    sizes[shipType?.sizeName]?.includes(clickedCell.y - currentCell.y) ||
-    (clickedCell.y + 1 - shipType.sizeNum < 0 &&
-      sizes[shipType?.sizeName]?.includes(currentCell.y))
+    clickedCellOtherAngle === currentCellOtherAngle &&
+    (sizes[shipType?.sizeName]?.includes(clickedCellAngle - currentCellAngle) ||
+      (clickedCellAngle + 1 - shipType.sizeNum < 0 &&
+        sizes[shipType?.sizeName]?.includes(currentCellAngle)))
   );
 };
