@@ -10,7 +10,12 @@ import {
   setSmallShipsPlayer,
 } from '../../store/slices/gameStateSlice';
 import { Coordinates, Ship } from '../../util/types';
-import { doesShipsOverlap, equalCoordinates } from '../../util/Utils';
+import {
+  convertCoordinatesToShip,
+  createArrayOfIncludedCoordinates,
+  doesShipsOverlap,
+  equalCoordinates,
+} from '../../util/Utils';
 import PlacementCell from '../cell/PlacementCell';
 import GridRenderer from './GridRenderer';
 
@@ -82,29 +87,16 @@ const PlacementGrid = ({ mapSize }: Props) => {
 
   React.useMemo(() => {
     if (clickedCell) {
-      // Create an array with all cell position based off coordinates of clicked cell and size/rotation of chosen ship
-      let newArr: Coordinates[] = [];
-      for (let i = 0; i < shipType.sizeNum; i++) {
-        newArr.push({
-          x: rotateX
-            ? clickedCell.x - shipType.sizeNum < 0
-              ? i
-              : clickedCell.x - i
-            : clickedCell.x,
-          y: rotateX
-            ? clickedCell.y
-            : clickedCell.y - shipType.sizeNum < 0
-            ? i
-            : clickedCell.y - i,
-        });
-      }
-      const setCell: Ship = {
-        cells: newArr.map((e) => {
-          return { coordinates: e };
-        }),
-      };
-      saveShipPlacementToStore(setCell);
-      setActiveCells(newArr);
+      const arrayOfIncludedCoordinates = createArrayOfIncludedCoordinates(
+        clickedCell,
+        rotateX,
+        shipType
+      );
+      const coordinatesAsShip = convertCoordinatesToShip(
+        arrayOfIncludedCoordinates
+      );
+      saveShipPlacementToStore(coordinatesAsShip);
+      setActiveCells(arrayOfIncludedCoordinates);
     }
   }, [clickedCell]);
 

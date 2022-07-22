@@ -1,0 +1,12 @@
+.invisible {
+  display: none;
+}
+
+.alertcontainer {
+  position: absolute;
+  display: flex;
+  opacity: 0.8;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}

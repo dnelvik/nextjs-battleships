@@ -10,7 +10,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prodstart": "npm run format && npm run build && npm run start"
+    "prodstart": "npm run format && npm run build && npm run start",
+    "lazystart": "npm run build && npm run start"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.3",

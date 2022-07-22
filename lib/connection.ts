@@ -9,7 +9,7 @@ export const connect = async () => {
 
   const EnemySchema = new mongoose.Schema({
     gameName: String,
-    ships: mongoose.Schema.Types.Mixed,
+    player: mongoose.Schema.Types.Mixed,
     playersTurn: Boolean,
   });
 

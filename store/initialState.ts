@@ -1,36 +1,45 @@
 import { GameState } from './slices/gameStateSlice';
-import { Player } from '../util/types';
+import { DatabaseType } from '../util/types';
 
-const initialPlayer: Player = {
-  playerName: '',
-  smallShip: {
-    cells: [],
-    isSunk: false,
+export const initialPlayerInfo: DatabaseType = {
+  gameName: '',
+  player: {
+    playerName: '',
+    smallShip: {
+      cells: [],
+      isSunk: false,
+    },
+    mediumShip: {
+      cells: [],
+      isSunk: false,
+    },
+    largeShip: {
+      cells: [],
+      isSunk: false,
+    },
   },
-  mediumShip: {
-    cells: [],
-    isSunk: false,
-  },
-  largeShip: {
-    cells: [],
-    isSunk: false,
-  },
+  playersTurn: true,
 };
 
 export const initialState: GameState = {
-  player: initialPlayer,
-  playersTurn: true,
-  phase: 'Placement',
-  shipType: {
-    sizeName: 'smallShip',
-    sizeNum: 2,
+  playerInfo: initialPlayerInfo,
+  gameInfo: {
+    phase: 'Placement',
+    shipType: {
+      sizeName: 'smallShip',
+      sizeNum: 2,
+    },
+    hoveredPlacementCell: undefined,
+    hoveredAttackCell: undefined,
+    clickedPlacementCell: undefined,
+    clickedAttackCell: undefined,
+    blocked: false,
+    placementConfirmed: false,
+    isPlacing: false,
+    rotateX: false,
   },
-  hoveredPlacementCell: undefined,
-  hoveredAttackCell: undefined,
-  clickedPlacementCell: undefined,
-  clickedAttackCell: undefined,
-  blocked: false,
-  placementConfirmed: false,
-  isPlacing: false,
-  rotateX: false,
+  alert: {
+    message: '',
+    type: '',
+  },
 };

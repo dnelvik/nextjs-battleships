@@ -11,7 +11,7 @@ const createEnemyGrid = (mapSize: number) => {
   for (let x = 0; x < mapSize; x++) {
     gridArray[x] = Array(mapSize);
     for (let y = 0; y < mapSize; y++) {
-      gridArray[x][y] = <AttackCell key={`${x}${y}`} />;
+      gridArray[x][y] = <AttackCell key={`${x}${y}`} x={x} y={y} />;
     }
   }
   return gridArray;

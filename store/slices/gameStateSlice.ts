@@ -1,149 +1,192 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
-import { Coordinates, Player, ShipType } from '../../util/types';
+import {
+  AlertType,
+  Coordinates,
+  DatabaseType,
+  ShipType,
+} from '../../util/types';
 import { initialState } from '../initialState';
 
 export interface GameState {
-  player: Player;
-  playersTurn: boolean;
-  phase: 'Placement' | 'Attack';
-  shipType: ShipType;
-  hoveredPlacementCell: Coordinates | undefined;
-  hoveredAttackCell: Coordinates | undefined;
-  clickedPlacementCell: Coordinates | undefined;
-  clickedAttackCell: Coordinates | undefined;
-  blocked: boolean;
-  placementConfirmed: boolean;
-  isPlacing: boolean;
-  rotateX: boolean;
+  playerInfo: DatabaseType;
+  gameInfo: {
+    phase: 'Placement' | 'Attack';
+    shipType: ShipType;
+    hoveredPlacementCell: Coordinates | undefined;
+    hoveredAttackCell: Coordinates | undefined;
+    clickedPlacementCell: Coordinates | undefined;
+    clickedAttackCell: Coordinates | undefined;
+    blocked: boolean;
+    placementConfirmed: boolean;
+    isPlacing: boolean;
+    rotateX: boolean;
+  };
+  alert: AlertType;
 }
 
 export const gameStateSlice = createSlice({
   name: 'gameState',
   initialState,
   reducers: {
+    setPlayerInfo: (
+      state: Draft<typeof initialState>,
+      action: PayloadAction<typeof initialState.playerInfo>
+    ) => {
+      state.playerInfo = action.payload;
+    },
+    setGameName: (
+      state: Draft<typeof initialState>,
+      action: PayloadAction<typeof initialState.playerInfo.gameName>
+    ) => {
+      state.playerInfo.gameName = action.payload;
+    },
     setPlayer: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.player>
+      action: PayloadAction<typeof initialState.playerInfo.player>
     ) => {
-      state.player = action.payload;
+      state.playerInfo.player = action.payload;
+    },
+    setPlayerName: (
+      state: Draft<typeof initialState>,
+      action: PayloadAction<typeof initialState.playerInfo.player.playerName>
+    ) => {
+      state.playerInfo.player.playerName = action.payload;
     },
     setSmallShipsPlayer: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.player.smallShip>
+      action: PayloadAction<typeof initialState.playerInfo.player.smallShip>
     ) => {
-      state.player.smallShip = action.payload;
+      state.playerInfo.player.smallShip = action.payload;
     },
     setMediumShipsPlayer: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.player.mediumShip>
+      action: PayloadAction<typeof initialState.playerInfo.player.mediumShip>
     ) => {
-      state.player.mediumShip = action.payload;
+      state.playerInfo.player.mediumShip = action.payload;
     },
     setLargeShipsPlayer: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.player.largeShip>
+      action: PayloadAction<typeof initialState.playerInfo.player.largeShip>
     ) => {
-      state.player.largeShip = action.payload;
+      state.playerInfo.player.largeShip = action.payload;
     },
     setPlayersTurn: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.playersTurn>
+      action: PayloadAction<typeof initialState.playerInfo.playersTurn>
     ) => {
-      state.playersTurn = action.payload;
+      state.playerInfo.playersTurn = action.payload;
     },
     setPhase: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.phase>
+      action: PayloadAction<typeof initialState.gameInfo.phase>
     ) => {
-      state.phase = action.payload;
+      state.gameInfo.phase = action.payload;
     },
     setShipType: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.shipType>
+      action: PayloadAction<typeof initialState.gameInfo.shipType>
     ) => {
-      state.shipType = action.payload;
+      state.gameInfo.shipType = action.payload;
     },
     setClickedAttackCell: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.clickedAttackCell>
+      action: PayloadAction<typeof initialState.gameInfo.clickedAttackCell>
     ) => {
-      state.clickedAttackCell = action.payload;
+      state.gameInfo.clickedAttackCell = action.payload;
     },
     setHoveredPlacementCell: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.hoveredPlacementCell>
+      action: PayloadAction<typeof initialState.gameInfo.hoveredPlacementCell>
     ) => {
-      state.hoveredPlacementCell = action.payload;
+      state.gameInfo.hoveredPlacementCell = action.payload;
     },
     setHoveredAttackCell: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.hoveredAttackCell>
+      action: PayloadAction<typeof initialState.gameInfo.hoveredAttackCell>
     ) => {
-      state.hoveredAttackCell = action.payload;
+      state.gameInfo.hoveredAttackCell = action.payload;
     },
     setBlocked: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.blocked>
+      action: PayloadAction<typeof initialState.gameInfo.blocked>
     ) => {
-      state.blocked = action.payload;
+      state.gameInfo.blocked = action.payload;
     },
     setPlacementConfirmed: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.placementConfirmed>
+      action: PayloadAction<typeof initialState.gameInfo.placementConfirmed>
     ) => {
-      state.placementConfirmed = action.payload;
+      state.gameInfo.placementConfirmed = action.payload;
     },
     setIsPlacing: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.isPlacing>
+      action: PayloadAction<typeof initialState.gameInfo.isPlacing>
     ) => {
-      state.isPlacing = action.payload;
+      state.gameInfo.isPlacing = action.payload;
     },
     setRotateX: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.rotateX>
+      action: PayloadAction<typeof initialState.gameInfo.rotateX>
     ) => {
-      state.rotateX = action.payload;
+      state.gameInfo.rotateX = action.payload;
     },
+    setAlert: (
+      state: Draft<typeof initialState>,
+      action: PayloadAction<typeof initialState.alert>
+    ) => {
+      state.alert = action.payload;
+    },
+    reset: () => initialState,
   },
 });
 
+export const getGameName = (state: { gameState: GameState }) =>
+  state.gameState.playerInfo.gameName;
 export const getPlayer = (state: { gameState: GameState }) =>
-  state.gameState.player;
+  state.gameState.playerInfo.player;
+export const getPlayerInfo = (state: { gameState: GameState }) =>
+  state.gameState.playerInfo;
 export const getSpecifiedShip = (
   state: { gameState: GameState },
   ship: string
 ) =>
   // @ts-ignore
-  state.gameState.player[ship];
+  state.gameState.playerInfo.player[ship];
 export const getPlayersTurn = (state: { gameState: GameState }) =>
-  state.gameState.playersTurn;
+  state.gameState.playerInfo.playersTurn;
+export const getPlayerName = (state: { gameState: GameState }) =>
+  state.gameState.playerInfo.player.playerName;
 export const getPhase = (state: { gameState: GameState }) =>
-  state.gameState.phase;
+  state.gameState.gameInfo.phase;
 export const getShipType = (state: { gameState: GameState }) =>
-  state.gameState.shipType;
+  state.gameState.gameInfo.shipType;
 export const getHoveredPlacementCell = (state: { gameState: GameState }) =>
-  state.gameState.hoveredPlacementCell;
+  state.gameState.gameInfo.hoveredPlacementCell;
 export const getHoveredAttackCell = (state: { gameState: GameState }) =>
-  state.gameState.hoveredAttackCell;
+  state.gameState.gameInfo.hoveredAttackCell;
 export const getBlocked = (state: { gameState: GameState }) =>
-  state.gameState.blocked;
+  state.gameState.gameInfo.blocked;
 export const getPlacementConfirmed = (state: { gameState: GameState }) =>
-  state.gameState.placementConfirmed;
+  state.gameState.gameInfo.placementConfirmed;
 export const getRotateX = (state: { gameState: GameState }) =>
-  state.gameState.rotateX;
+  state.gameState.gameInfo.rotateX;
 export const getAllActiveCells = (state: { gameState: GameState }) => {
-  return state.gameState.player.smallShip?.cells
-    .concat(state.gameState.player.mediumShip.cells)
-    .concat(state.gameState.player.largeShip.cells);
+  return state.gameState.playerInfo.player?.smallShip.cells
+    .concat(state.gameState.playerInfo.player.mediumShip.cells)
+    .concat(state.gameState.playerInfo.player.largeShip.cells);
 };
 export const getIsPlacing = (state: { gameState: GameState }) => {
-  return state.gameState.isPlacing;
+  return state.gameState.gameInfo.isPlacing;
+};
+export const getAlert = (state: { gameState: GameState }) => {
+  return state.gameState.alert;
 };
 
 // Exports all actions
 export const {
+  setGameName,
   setPlayer,
+  setPlayerName,
   setSmallShipsPlayer,
   setMediumShipsPlayer,
   setLargeShipsPlayer,
@@ -157,6 +200,9 @@ export const {
   setPlacementConfirmed,
   setIsPlacing,
   setRotateX,
+  reset,
+  setAlert,
+  setPlayerInfo,
 } = gameStateSlice.actions;
 
 export default gameStateSlice.reducer;

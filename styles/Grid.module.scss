@@ -3,11 +3,13 @@
   margin: auto;
 }
 
-.ship-buttons-container {
+.shipbuttons {
   display: flex;
   padding: 2rem;
+  justify-content: center;
 
   & > * {
     margin-right: 1rem;
+    margin-bottom: 1rem;
   }
 }

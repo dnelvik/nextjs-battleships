@@ -30,6 +30,7 @@ const FindGame = () => {
             className="form-control"
             aria-label="Small"
             aria-describedby="inputGroup-sizing-sm"
+            required
           />
         </div>
         <div className="input-group input-group-sm mb-3">
@@ -44,12 +45,16 @@ const FindGame = () => {
             className="form-control"
             aria-label="Small"
             aria-describedby="inputGroup-sizing-sm"
+            required
           />
         </div>
       </div>
       <div className={styles.home__buttons}>
         <button type="submit" className="btn btn-primary" onClick={handleClick}>
           Find game
+        </button>
+        <button type="submit" className="btn btn-primary" onClick={handleClick}>
+          Start new game
         </button>
       </div>
     </form>

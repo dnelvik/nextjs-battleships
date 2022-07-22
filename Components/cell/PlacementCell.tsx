@@ -48,7 +48,7 @@ const PlacementCell = ({
   const allActiveCells = useSelector(getAllActiveCells);
   const [isClicked, setIsClicked] = React.useState(false);
   const [isHovered, setIsHovered] = React.useState(false);
-  let currentShip = player[shipType?.sizeName];
+  let currentShip = player && player[shipType?.sizeName];
   const currentCell: CellType = { coordinates: { x, y } };
   let currentCellIsActiveInCurrentShip = doesShipsContainCoordinates(
     currentShip,

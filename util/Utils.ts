@@ -1,4 +1,6 @@
-import { Coordinates, Ship, ShipType, sizes } from './types';
+import { Coordinates, DatabaseType, Ship, ShipType, sizes } from './types';
+import { postPlayerShipsToDb } from './databaseUtil';
+import { setAlert } from '../store/slices/gameStateSlice';
 
 export const equalCoordinates = (
   coords1: Coordinates,
@@ -41,4 +43,53 @@ export const checkIfCellIsIncludedInShip = (
       (clickedCellAngle + 1 - shipType.sizeNum < 0 &&
         sizes[shipType?.sizeName]?.includes(currentCellAngle)))
   );
+};
+
+export const createArrayOfIncludedCoordinates = (
+  clickedCell: Coordinates,
+  rotateX: boolean,
+  shipType: ShipType
+) => {
+  let newArr: Coordinates[] = [];
+  for (let i = 0; i < shipType.sizeNum; i++) {
+    newArr.push({
+      x: rotateX
+        ? clickedCell.x - shipType.sizeNum < 0
+          ? i
+          : clickedCell.x - i
+        : clickedCell.x,
+      y: rotateX
+        ? clickedCell.y
+        : clickedCell.y - shipType.sizeNum < 0
+        ? i
+        : clickedCell.y - i,
+    });
+  }
+  return newArr;
+};
+
+export const convertCoordinatesToShip = (coordinates: Coordinates[]) => {
+  const coordinatesAsShip: Ship = {
+    cells: coordinates.map((coordinate) => {
+      return { coordinates: coordinate };
+    }),
+  };
+  return coordinatesAsShip;
+};
+
+export const otherPlayersTurnAlert = (dispatch: any, ok: boolean) => {
+  if (ok) {
+    dispatch(
+      setAlert({
+        message:
+          'You are awaiting your opponents turn. Please come back later.',
+        type: 'Opponents turn',
+      })
+    );
+  } else {
+    setAlert({
+      message: 'Something went wrong',
+      type: 'Error',
+    });
+  }
 };

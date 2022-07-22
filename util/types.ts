@@ -6,6 +6,7 @@ export type Coordinates = {
 export type CellType = {
   coordinates: Coordinates;
   isHit?: boolean;
+  idx?: number;
 };
 
 export type Player = {
@@ -21,79 +22,25 @@ export type Ship = {
 };
 
 export type ShipType = {
-  sizeName: 'smallShip' | 'mediumShip' | 'largeShip';
+  sizeName: ShipNames;
   sizeNum: number;
 };
 
+export type ShipNames = 'smallShip' | 'mediumShip' | 'largeShip';
+
 export type DatabaseType = {
   gameName: string;
-  ships: Player;
+  player: Player;
   playersTurn: boolean;
+};
+
+export type AlertType = {
+  message: string;
+  type: 'Warning' | 'Error' | 'Success' | 'Opponents turn' | '';
 };
 
 export const sizes = {
   smallShip: [0, 1],
   mediumShip: [0, 1, 2],
   largeShip: [0, 1, 2, 3],
-};
-
-export const mockdata = (gameName: string, playerName: string) => {
-  return {
-    gameName: gameName,
-    ships: {
-      playerName: playerName,
-      smallShip: {
-        cells: [
-          {
-            coordinates: { x: 0, y: 0 },
-            isHit: false,
-          },
-          {
-            coordinates: { x: 0, y: 1 },
-            isHit: false,
-          },
-        ],
-        isSunk: false,
-      },
-      mediumShip: {
-        cells: [
-          {
-            coordinates: { x: 1, y: 0 },
-            isHit: false,
-          },
-          {
-            coordinates: { x: 1, y: 1 },
-            isHit: false,
-          },
-          {
-            coordinates: { x: 1, y: 2 },
-            isHit: false,
-          },
-        ],
-        isSunk: false,
-      },
-      largeShip: {
-        cells: [
-          {
-            coordinates: { x: 2, y: 0 },
-            isHit: false,
-          },
-          {
-            coordinates: { x: 2, y: 1 },
-            isHit: false,
-          },
-          {
-            coordinates: { x: 2, y: 2 },
-            isHit: false,
-          },
-          {
-            coordinates: { x: 2, y: 3 },
-            isHit: false,
-          },
-        ],
-        isSunk: false,
-      },
-    },
-    playersTurn: false,
-  };
 };

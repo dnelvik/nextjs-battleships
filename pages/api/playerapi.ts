@@ -3,21 +3,27 @@ import { connect } from '../../lib/connection';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { Enemy } = await connect();
-  const id: string = req.query.id as string;
   const catcher = (error: Error) => res.status(400).json({ error });
   if (req.method === 'GET') {
     const { gameName, playerName } = req.query;
     res.json(
       await Enemy.find({
         gameName: gameName,
-        'ships.playerName': playerName,
+        'player.playerName': playerName,
       }).catch(catcher)
     );
   } else if (req.method === 'POST') {
     res.json(await Enemy.create(req.body).catch(catcher));
   } else if (req.method === 'PUT') {
+    const sm = 'smallShip';
     res.json(
-      await Enemy.findByIdAndUpdate(id, req.body, { new: true }).catch(catcher)
+      await Enemy.updateOne(
+        {
+          gameName: req.body.gameName,
+          'player.playerName': !req.body.ships.playerName,
+        },
+        { $set: { player: req.body.ships[sm][0], playersTurn: true } }
+      ).catch(catcher)
     );
   }
 };

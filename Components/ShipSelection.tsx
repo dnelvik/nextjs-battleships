@@ -1,34 +1,36 @@
 import React from 'react';
-import styles from '../styles/Grid.module.scss';
 import { useDispatch, useSelector } from '../store/store';
 import {
+  getPlayerInfo,
   getRotateX,
   setRotateX,
   setShipType,
 } from '../store/slices/gameStateSlice';
 import { sizes } from '../util/types';
-import { dbGetCall, dbPostCall } from '../util/databaseUtil';
+import { dbGetCall, postPlayerShipsToDb } from '../util/databaseUtil';
+import { otherPlayersTurnAlert } from '../util/Utils';
 
 const ShipSelection = () => {
   const dispatch = useDispatch();
   const rotate = useSelector(getRotateX);
+  const stateInDatabase = useSelector(getPlayerInfo);
 
   const onClick = (size: 'smallShip' | 'mediumShip' | 'largeShip') => {
     dispatch(setShipType({ sizeName: size, sizeNum: sizes[size].length }));
   };
 
-  const getTest = async () => {
-    const res = await dbGetCall('danay', 'Mia');
-    console.log(JSON.stringify(res));
+  const confirmPlacement = async () => {
+    const res = await postPlayerShipsToDb(stateInDatabase);
+    otherPlayersTurnAlert(dispatch, res.ok);
   };
 
-  const postTest = async () => {
-    await dbPostCall('danay', 'Mia');
-    await dbPostCall('danay', 'Danay');
+  const getTest = async () => {
+    const res = await dbGetCall('danay', 'Danay');
+    console.log(res);
   };
 
   return (
-    <div className={styles.shipButtonsContainer}>
+    <div className="btn-group" role="group" aria-label="Basic example">
       <button className="btn btn-primary" onClick={() => onClick('smallShip')}>
         Small Ship
       </button>
@@ -43,11 +45,11 @@ const ShipSelection = () => {
         onClick={() => dispatch(setRotateX(!rotate))}>
         Rotate
       </button>
+      <button className="btn btn-primary" onClick={confirmPlacement}>
+        Confirm placement
+      </button>
       <button className="btn btn-primary" onClick={getTest}>
         Get Test
-      </button>
-      <button className="btn btn-primary" onClick={postTest}>
-        Post Test
       </button>
     </div>
   );
