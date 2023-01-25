@@ -16,7 +16,7 @@ const Battleships = ({ playerData }: Props) => {
 
   React.useEffect(() => {
     if (playerData) {
-      dispatch(setPlayer(playerData.ships));
+      dispatch(setPlayer(playerData.player));
       dispatch(setPhase('Attack'));
     }
   }, [playerData]);
@@ -36,6 +36,10 @@ export async function getServerSideProps(ctx: any) {
     `http://localhost:3000/api/restapi/?gameName=${gameName}&playerName=${playerName}`
   );
   const data = await res.json();
+  console.log(data);
+  if (!data) {
+    return { notFound: true };
+  }
   return { props: { playerData: data[0] } };
 }
 

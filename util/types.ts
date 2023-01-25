@@ -27,7 +27,7 @@ export type ShipType = {
 
 export type DatabaseType = {
   gameName: string;
-  ships: Player;
+  player: Player;
   playersTurn: boolean;
 };
 

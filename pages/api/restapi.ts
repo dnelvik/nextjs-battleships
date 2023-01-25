@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { connect } from '../../lib/connection';
+import { connect } from '../../server/connection';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { Enemy } = await connect();
@@ -10,7 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.json(
       await Enemy.find({
         gameName: gameName,
-        'ships.playerName': playerName,
+        'player.playerName': playerName,
       }).catch(catcher)
     );
   } else if (req.method === 'POST') {

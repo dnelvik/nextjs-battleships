@@ -29,7 +29,12 @@ const ShipSelection = () => {
 
   return (
     <div className={styles.shipButtonsContainer}>
-      <button className="btn btn-primary" onClick={() => onClick('smallShip')}>
+      <button
+        className="btn btn-primary"
+        onClick={() => {
+          alert('test');
+          console.log('test');
+        }}>
         Small Ship
       </button>
       <button className="btn btn-primary" onClick={() => onClick('mediumShip')}>
