@@ -7,12 +7,8 @@ const FindGame = () => {
   const router = useRouter();
 
   const handleClick = (data: any) => {
-    const { gameName, playerName } = data;
-    gameName && playerName
-      ? router.push(
-          `/battleships?gameName=${gameName}&playerName=${playerName}`
-        )
-      : '';
+    const { playerName } = data;
+    playerName ? router.push(`${playerName}`) : '';
   };
 
   return (
@@ -26,20 +22,6 @@ const FindGame = () => {
           </div>
           <input
             {...register('playerName')}
-            type="text"
-            className="form-control"
-            aria-label="Small"
-            aria-describedby="inputGroup-sizing-sm"
-          />
-        </div>
-        <div className="input-group input-group-sm mb-3">
-          <div className="input-group-prepend">
-            <span className="input-group-text" id="inputGroup-sizing-sm">
-              GameName
-            </span>
-          </div>
-          <input
-            {...register('gameName')}
             type="text"
             className="form-control"
             aria-label="Small"

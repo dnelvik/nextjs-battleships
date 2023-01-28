@@ -4,6 +4,7 @@ import AttackCell from '../cell/AttackCell';
 
 interface Props {
   mapSize: number;
+  gameId: string | string[] | undefined;
 }
 
 const createEnemyGrid = (mapSize: number) => {

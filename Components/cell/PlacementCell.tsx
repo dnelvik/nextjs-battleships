@@ -64,7 +64,7 @@ const PlacementCell = ({
         ).length > 0;
       currentCellIsActive && setIsClicked(true);
     }
-  }, [player]);
+  }, [allActiveCells, player]);
 
   // Sets cell to clicked if included
   React.useMemo(() => {

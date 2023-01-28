@@ -7,7 +7,7 @@ import {
   setShipType,
 } from '../store/slices/gameStateSlice';
 import { sizes } from '../util/types';
-import { dbGetCall, dbPostCall } from '../util/databaseUtil';
+import { dbGetCall } from '../util/databaseUtil';
 
 const ShipSelection = () => {
   const dispatch = useDispatch();
@@ -21,11 +21,13 @@ const ShipSelection = () => {
     const res = await dbGetCall('danay', 'Mia');
     console.log(JSON.stringify(res));
   };
+/*
 
   const postTest = async () => {
-    await dbPostCall('danay', 'Mia');
-    await dbPostCall('danay', 'Danay');
+    await dbPostCall('danay');
+    await dbPostCall('danay');
   };
+*/
 
   return (
     <div className={styles.shipButtonsContainer}>
@@ -51,7 +53,7 @@ const ShipSelection = () => {
       <button className="btn btn-primary" onClick={getTest}>
         Get Test
       </button>
-      <button className="btn btn-primary" onClick={postTest}>
+      <button className="btn btn-primary" >
         Post Test
       </button>
     </div>

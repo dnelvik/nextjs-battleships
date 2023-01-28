@@ -16,6 +16,7 @@ import GridRenderer from './GridRenderer';
 
 interface Props {
   mapSize: number;
+  gameId: string | string[] | undefined;
 }
 
 const createPlacementGrid = (
