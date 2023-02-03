@@ -3,26 +3,22 @@ import styles from '../../styles/Home.module.scss';
 import ShipSelection from '../../Components/ShipSelection';
 import PlacementGrid from '../../Components/grid/PlacementGrid';
 import EnemyGrid from '../../Components/grid/EnemyGrid';
-import { setPhase } from '../../store/slices/gameStateSlice';
+import { setPhase, setPlayer } from '../../store/slices/gameStateSlice';
 import { useDispatch } from '../../store/store';
-import { DatabaseType } from '../../util/types';
 import { useRouter } from 'next/router';
+import { client, FIND_USER_SHIPS_QUERY } from '../../graphql/queries';
 
-interface Props {
-  playerData: DatabaseType;
-}
-
-const GameId = ({ playerData }: Props) => {
+const GameId = ({ usersData }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { gameId } = router.query;
 
   React.useEffect(() => {
-    if (playerData) {
-      // dispatch(setPlayer(playerData.player));
-      dispatch(setPhase('Attack'));
+    if (usersData) {
+      dispatch(setPlayer(usersData));
+      dispatch(setPhase('Attack')); // hardkodet, må være dynamisk
     }
-  }, [dispatch, playerData]);
+  }, [dispatch, usersData]);
 
   return (
     <div className={styles.home}>
@@ -33,17 +29,21 @@ const GameId = ({ playerData }: Props) => {
   );
 };
 
-export async function getServerSideProps(ctx: any) {
-  const { gameName, playerName } = ctx.query;
-  const res = await fetch(
-    `http://localhost:3000/api/restapi/?gameName=${gameName}&playerName=${playerName}`
-  );
-  const data = await res.json();
-  console.log(data);
-  if (!data) {
-    return { notFound: true };
-  }
-  return { props: { playerData: data[0] } };
+export async function getServerSideProps(context) {
+  const result = await client.query({
+    query: FIND_USER_SHIPS_QUERY,
+    variables: {
+      id: context.params.gameId,
+    },
+  });
+
+  const usersData = result?.data.player.players.filter(
+    (player) => player.name === context.params.user
+  )[0];
+
+  return {
+    props: { usersData }, // will be passed to the page component as props
+  };
 }
 
 export default GameId;

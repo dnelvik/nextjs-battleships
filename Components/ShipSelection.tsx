@@ -7,7 +7,6 @@ import {
   setShipType,
 } from '../store/slices/gameStateSlice';
 import { sizes } from '../util/types';
-import { dbGetCall } from '../util/databaseUtil';
 
 const ShipSelection = () => {
   const dispatch = useDispatch();
@@ -17,11 +16,11 @@ const ShipSelection = () => {
     dispatch(setShipType({ sizeName: size, sizeNum: sizes[size].length }));
   };
 
+  /*
   const getTest = async () => {
     const res = await dbGetCall('danay', 'Mia');
     console.log(JSON.stringify(res));
   };
-/*
 
   const postTest = async () => {
     await dbPostCall('danay');
@@ -50,12 +49,8 @@ const ShipSelection = () => {
         onClick={() => dispatch(setRotateX(!rotate))}>
         Rotate
       </button>
-      <button className="btn btn-primary" onClick={getTest}>
-        Get Test
-      </button>
-      <button className="btn btn-primary" >
-        Post Test
-      </button>
+      <button className="btn btn-primary">Get Test</button>
+      <button className="btn btn-primary">Post Test</button>
     </div>
   );
 };

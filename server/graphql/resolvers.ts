@@ -1,16 +1,31 @@
-import Game from '../models';
+import { Game, Player } from '../models';
 
 const resolvers = {
   Query: {
-    async game() {
-      // return await Game.findById('63d43c500e55bc8443810c21')
+    async game(parent: any, args: any) {
+      return await Game.findById(args.id);
     },
+
+    /*    async playerShip(_: any, args: any) {
+      const Game = await Game.findById(args.id).Player.find({name})
+      Game.findById(args.id).then(spill => spill.find())
+    },*/
+
+    async player(parent: any, args: any) {
+      return await Game.findById(args.id);
+    },
+
     async games(parent: any, args: any) {
       return await Game.find({
         players: { $elemMatch: { name: args.user } },
       });
     },
-    players() {},
+
+    async gameIds(parent: any, args: any) {
+      return await Game.find({
+        players: { $elemMatch: { name: args.user } },
+      });
+    },
   },
 
   Mutations: {},

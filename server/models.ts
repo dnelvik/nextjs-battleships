@@ -3,20 +3,27 @@ import { model, models, Schema } from 'mongoose';
 const CoordinatesSchema = new Schema({
   x: Number,
   y: Number,
+});
+
+const CellSchema = new Schema({
+  coordinates: CoordinatesSchema,
   isHit: Boolean,
 });
 
 const ShipSchema = new Schema({
-  coordinates: [CoordinatesSchema],
+  cells: [CellSchema],
   isSunk: Boolean,
 });
 
-const PlayerSchema = new Schema({
-  name: String,
-  smallShip: ShipSchema,
-  mediumShip: ShipSchema,
-  largeShip: ShipSchema,
-});
+const PlayerSchema = new Schema(
+  {
+    name: String,
+    smallShip: ShipSchema,
+    mediumShip: ShipSchema,
+    largeShip: ShipSchema,
+  },
+  { collection: 'Battleships' }
+);
 
 const GameSchema = new Schema(
   {
@@ -27,5 +34,6 @@ const GameSchema = new Schema(
 );
 
 const Game = models.Game || model('Game', GameSchema);
+const Player = models.Player || model('Player', PlayerSchema);
 
-export default Game;
+module.exports = { Game, Player };

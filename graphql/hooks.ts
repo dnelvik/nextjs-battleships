@@ -1,13 +1,13 @@
 import { useQuery } from '@apollo/client';
-import { FIND_USERS_GAMES_QUERY } from './queries';
+import { FIND_USERS_GAME_IDS } from './queries';
 
-export const useUsersGames = (user: string) => {
-  const { loading, error, data } = useQuery(FIND_USERS_GAMES_QUERY, {
+export const useGameIds = (user: string) => {
+  const { loading, error, data } = useQuery(FIND_USERS_GAME_IDS, {
     variables: { user },
   });
 
   return {
-    games: data?.games,
+    gameIds: data?.gameIds,
     loading,
     error: Boolean(error),
   };

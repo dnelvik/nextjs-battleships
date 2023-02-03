@@ -9,10 +9,11 @@ export type CellType = {
 };
 
 export type Player = {
-  playerName: string;
+  name: string;
   smallShip: Ship;
   mediumShip: Ship;
   largeShip: Ship;
+  games: string[];
 };
 
 export type Ship = {
@@ -25,9 +26,10 @@ export type ShipType = {
   sizeNum: number;
 };
 
-export type DatabaseType = {
-  players: Player;
-  playersTurn: boolean;
+export type Game = {
+  _id: string;
+  players: Player[];
+  playersTurn: string;
 };
 
 export const sizes = {
@@ -93,6 +95,6 @@ export const mockdata = (gameName: string, playerName: string) => {
         isSunk: false,
       },
     },
-    playersTurn: false,
+    playersTurn: 'Danay',
   };
 };

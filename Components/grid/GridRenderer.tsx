@@ -17,6 +17,7 @@ const GridRenderer = ({ grid }: Props) => {
     dispatch(setHoveredPlacementCell(undefined));
     dispatch(setHoveredAttackCell(undefined));
   };
+
   return (
     <div className={styles.grid} onMouseLeave={clearHover}>
       {grid.map((e: any, idx: number) => {

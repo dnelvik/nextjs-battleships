@@ -2,7 +2,7 @@ import { GameState } from './slices/gameStateSlice';
 import { Player } from '../util/types';
 
 const initialPlayer: Player = {
-  playerName: '',
+  name: '',
   smallShip: {
     cells: [],
     isSunk: false,

@@ -1,19 +1,18 @@
 import { useRouter } from 'next/router';
 import { Button } from 'react-bootstrap';
 import Link from 'next/link';
-import { useUsersGames } from '../../graphql/hooks';
+import { useGameIds } from '../../graphql/hooks';
 
 const UserPage = () => {
   const router = useRouter();
   const { user } = router.query;
-
-  const { loading, error, games } = useUsersGames(user as string);
+  const { loading, error, gameIds } = useGameIds(user as string);
 
   if (loading) {
-    console.log(loading);
+    return <p>loading</p>;
   }
   if (error) {
-    console.log(error);
+    return <p>error</p>;
   }
 
   const createHref = (id: string, user: any) => {
@@ -22,7 +21,7 @@ const UserPage = () => {
 
   return (
     <div>
-      {games?.map((game: any) => (
+      {gameIds?.map((game: any) => (
         <Link href={createHref(game._id, user)} key={game._id}>
           <Button>
             {game.players[0].name} vs {game.players[1].name}
