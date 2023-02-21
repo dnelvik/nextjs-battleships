@@ -110,15 +110,19 @@ const PlacementCell = ({
   }, [hoveredCell]);
 
   const onClick = () => {
-    if (!blocked) {
+    if (!blocked && phase === 'Placement') {
       setClickedCell(currentCell.coordinates);
     }
   };
 
   const setStyle = () => {
+
     if (!isHovered) {
       return isClicked ? styles.cell__clicked : styles.cell__clean;
     } else if (!isClicked) {
+      if (phase === 'Attack') {
+        return styles.cell__blocked
+      }
       return isHovered ? styles.cell__hover : styles.cell__clean;
     } else {
       if (isPlacing) {

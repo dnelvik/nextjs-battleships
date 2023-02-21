@@ -1,7 +1,7 @@
 import { GameState } from './slices/gameStateSlice';
 import { Player } from '../util/types';
 
-const initialPlayer: Player = {
+export const initialPlayer: Player = {
   name: '',
   smallShip: {
     cells: [],
@@ -15,6 +15,22 @@ const initialPlayer: Player = {
     cells: [],
     isSunk: false,
   },
+};
+
+export const createModelFromInitialPlayer = (player: string, opponent: string) => {
+  return {
+    players: [
+      {
+        ...initialPlayer,
+        name: player
+      },
+      {
+        ...initialPlayer,
+        name: opponent
+      }
+    ],
+    playersTurn: player
+  }
 };
 
 export const initialState: GameState = {

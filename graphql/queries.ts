@@ -62,12 +62,10 @@ const GAME_FRAGMENT = gql`
 `;
 
 export const FIND_USERS_GAME_IDS = gql`
+  ${GAME_FRAGMENT}
   query FindUsersGameIds($user: String!) {
     gameIds(user: $user) {
-      _id
-      players {
-        name
-      }
+      ...GameFragment
     }
   }
 `;
@@ -92,6 +90,27 @@ export const FIND_USER_SHIPS_QUERY = gql`
       players {
         ...PlayerFragment
       }
+    }
+  }
+`;
+
+export const SET_USERS_SHIPS = gql`
+  ${GAME_FRAGMENT}
+  mutation SetUsersShips($gameId: ID!, $playerShips: GameInput!) {
+    playerShips: setShips(gameId: $gameId, playerShips: $playerShips) {
+      ...GameFragment
+    }
+  }
+`;
+
+export const CREATE_GAME = gql`
+  ${PLAYER_FRAGMENT}
+  mutation CreateGame($newGame: GameInput!) {
+    newGame: createGame(newGame: $newGame) {
+      players {
+        ...PlayerFragment
+      }
+      playersTurn
     }
   }
 `;

@@ -42,3 +42,12 @@ export const checkIfCellIsIncludedInShip = (
         sizes[shipType?.sizeName]?.includes(currentCellAngle)))
   );
 };
+
+export const removeTypeNameFromGQLResult = (result: Record<string, any>) => {
+  return JSON.parse(
+    JSON.stringify(result, (key, value) => {
+      if (key === '__typename') return;
+      return value;
+    })
+  );
+};

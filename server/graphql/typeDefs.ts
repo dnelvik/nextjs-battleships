@@ -5,22 +5,21 @@ const typeDefs = gql`
     game(id: ID!): Game!
     games(user: String!): [Game]!
     gameIds(user: String!): [Game]!
-    userShips(id: ID!, name: String!): Player!
     player(id: ID!): Game!
-    playerShip(id: ID!, name: String!): Player
   }
 
-  type Mutations {
-    updateGame: String
+  type Mutation {
+    setShips(gameId: ID!, playerShips: GameInput!): Game
+    createGame(newGame: GameInput!): Game
   }
 
   type Coordinates {
-    x: Int!
-    y: Int!
+    x: Int
+    y: Int
   }
 
   type Cell {
-    coordinates: Coordinates!
+    coordinates: Coordinates
     isHit: Boolean
   }
 
@@ -39,6 +38,34 @@ const typeDefs = gql`
   type Game {
     _id: ID!
     players: [Player]!
+    playersTurn: String!
+  }
+
+  input CoordinatesInput {
+    x: Int
+    y: Int
+  }
+
+  input CellInput {
+    coordinates: CoordinatesInput
+    isHit: Boolean
+  }
+
+  input ShipInput {
+    cells: [CellInput]
+    isSunk: Boolean
+  }
+
+  input PlayerInput {
+    name: String!
+    smallShip: ShipInput!
+    mediumShip: ShipInput!
+    largeShip: ShipInput!
+  }
+
+  input GameInput {
+    _id: ID
+    players: [PlayerInput]!
     playersTurn: String!
   }
 `;

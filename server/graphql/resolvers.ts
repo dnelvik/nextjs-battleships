@@ -1,15 +1,10 @@
-import { Game, Player } from '../models';
+import { Game } from '../models';
 
 const resolvers = {
   Query: {
     async game(parent: any, args: any) {
       return await Game.findById(args.id);
     },
-
-    /*    async playerShip(_: any, args: any) {
-      const Game = await Game.findById(args.id).Player.find({name})
-      Game.findById(args.id).then(spill => spill.find())
-    },*/
 
     async player(parent: any, args: any) {
       return await Game.findById(args.id);
@@ -28,7 +23,15 @@ const resolvers = {
     },
   },
 
-  Mutations: {},
+  Mutation: {
+    async setShips(parent: any, args: any) {
+      return await Game.findByIdAndUpdate(args.gameId, args.playerShips);
+    },
+
+    async createGame(parent: any, args: any) {
+      return await Game.create(args.newGame, (error: any) => error && console.log(error));
+    },
+  },
 };
 
 export default resolvers;

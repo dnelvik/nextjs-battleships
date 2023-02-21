@@ -13,7 +13,6 @@ export type Player = {
   smallShip: Ship;
   mediumShip: Ship;
   largeShip: Ship;
-  games: string[];
 };
 
 export type Ship = {

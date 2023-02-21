@@ -3,46 +3,46 @@ import styles from '../../styles/Home.module.scss';
 import ShipSelection from '../../Components/ShipSelection';
 import PlacementGrid from '../../Components/grid/PlacementGrid';
 import EnemyGrid from '../../Components/grid/EnemyGrid';
-import { setPhase, setPlayer } from '../../store/slices/gameStateSlice';
+import {setPhase, setPlayer, setPlayersTurn} from '../../store/slices/gameStateSlice';
 import { useDispatch } from '../../store/store';
 import { useRouter } from 'next/router';
-import { client, FIND_USER_SHIPS_QUERY } from '../../graphql/queries';
+import { client, FIND_GAME_QUERY } from '../../graphql/queries';
 
-const GameId = ({ usersData }) => {
+const GameId = ({ gameData }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { gameId } = router.query;
+  const { gameId, user } = router.query;
 
   React.useEffect(() => {
-    if (usersData) {
+    if (gameData) {
+      const usersData = gameData?.players.filter(
+        (player) => player.name === user
+      )[0];
       dispatch(setPlayer(usersData));
-      dispatch(setPhase('Attack')); // hardkodet, må være dynamisk
+      dispatch(setPlayersTurn(gameData?.playersTurn === user));
+      dispatch(usersData?.smallShip.cells.length > 0 ? setPhase('Attack') : setPhase('Placement'));
     }
-  }, [dispatch, usersData]);
+  }, [dispatch, gameData]);
 
   return (
     <div className={styles.home}>
-      <EnemyGrid mapSize={10} gameId={gameId} />
+      <EnemyGrid mapSize={10} gameId={gameId} gameData={gameData}/>
       <PlacementGrid mapSize={10} gameId={gameId} />
-      <ShipSelection />
+      <ShipSelection gameData={gameData} user={user} gameId={gameId} />
     </div>
   );
 };
 
 export async function getServerSideProps(context) {
-  const result = await client.query({
-    query: FIND_USER_SHIPS_QUERY,
+  const gameData = await client.query({
+    query: FIND_GAME_QUERY,
     variables: {
       id: context.params.gameId,
     },
   });
 
-  const usersData = result?.data.player.players.filter(
-    (player) => player.name === context.params.user
-  )[0];
-
   return {
-    props: { usersData }, // will be passed to the page component as props
+    props: { gameData: gameData.data.game }, // will be passed to the page component as props
   };
 }
 
