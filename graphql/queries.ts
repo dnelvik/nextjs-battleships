@@ -20,32 +20,17 @@ const CELL_FRAGMENT = gql`
     coordinates {
       ...CoordinatesFragment
     }
+    shipType
     isHit
   }
 `;
 
-const SHIP_FRAGMENT = gql`
-  ${CELL_FRAGMENT}
-  fragment ShipFragment on Ship {
-    cells {
-      ...CellFragment
-    }
-    isSunk
-  }
-`;
-
 const PLAYER_FRAGMENT = gql`
-  ${SHIP_FRAGMENT}
+  ${CELL_FRAGMENT}
   fragment PlayerFragment on Player {
     name
-    smallShip {
-      ...ShipFragment
-    }
-    mediumShip {
-      ...ShipFragment
-    }
-    largeShip {
-      ...ShipFragment
+    cells {
+      ...CellFragment
     }
   }
 `;
@@ -83,21 +68,10 @@ export const FIND_GAME_QUERY = gql`
   }
 `;
 
-export const FIND_USER_SHIPS_QUERY = gql`
-  ${PLAYER_FRAGMENT}
-  query FindUserShipsQuery($id: ID!) {
-    player(id: $id) {
-      players {
-        ...PlayerFragment
-      }
-    }
-  }
-`;
-
 export const SET_USERS_SHIPS = gql`
   ${GAME_FRAGMENT}
   mutation SetUsersShips($gameId: ID!, $playerShips: GameInput!) {
-    playerShips: setShips(gameId: $gameId, playerShips: $playerShips) {
+    playerShips: setCells(gameId: $gameId, playerShips: $playerShips) {
       ...GameFragment
     }
   }

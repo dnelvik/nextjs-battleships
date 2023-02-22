@@ -7,6 +7,7 @@ import {setPhase, setPlayer, setPlayersTurn} from '../../store/slices/gameStateS
 import { useDispatch } from '../../store/store';
 import { useRouter } from 'next/router';
 import { client, FIND_GAME_QUERY } from '../../graphql/queries';
+import {getUsersData} from "../../util/Utils";
 
 const GameId = ({ gameData }) => {
   const dispatch = useDispatch();
@@ -15,18 +16,16 @@ const GameId = ({ gameData }) => {
 
   React.useEffect(() => {
     if (gameData) {
-      const usersData = gameData?.players.filter(
-        (player) => player.name === user
-      )[0];
+      const usersData = getUsersData(gameData, user);
       dispatch(setPlayer(usersData));
       dispatch(setPlayersTurn(gameData?.playersTurn === user));
-      dispatch(usersData?.smallShip.cells.length > 0 ? setPhase('Attack') : setPhase('Placement'));
+      dispatch(usersData?.cells.length > 0 ? setPhase('Attack') : setPhase('Placement'));
     }
   }, [dispatch, gameData]);
 
   return (
     <div className={styles.home}>
-      <EnemyGrid mapSize={10} gameId={gameId} gameData={gameData}/>
+      <EnemyGrid mapSize={10} gameId={gameId} gameData={gameData} user={user} gameId={gameId} />
       <PlacementGrid mapSize={10} gameId={gameId} />
       <ShipSelection gameData={gameData} user={user} gameId={gameId} />
     </div>
@@ -40,6 +39,8 @@ export async function getServerSideProps(context) {
       id: context.params.gameId,
     },
   });
+
+  console.log(gameData?.data?.game?.players[0]);
 
   return {
     props: { gameData: gameData.data.game }, // will be passed to the page component as props

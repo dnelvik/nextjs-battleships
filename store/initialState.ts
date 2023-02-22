@@ -3,18 +3,7 @@ import { Player } from '../util/types';
 
 export const initialPlayer: Player = {
   name: '',
-  smallShip: {
-    cells: [],
-    isSunk: false,
-  },
-  mediumShip: {
-    cells: [],
-    isSunk: false,
-  },
-  largeShip: {
-    cells: [],
-    isSunk: false,
-  },
+  cells: []
 };
 
 export const createModelFromInitialPlayer = (player: string, opponent: string) => {
@@ -37,10 +26,7 @@ export const initialState: GameState = {
   player: initialPlayer,
   playersTurn: true,
   phase: 'Placement',
-  shipType: {
-    sizeName: 'smallShip',
-    sizeNum: 2,
-  },
+  shipType: 'smallShip',
   hoveredPlacementCell: undefined,
   hoveredAttackCell: undefined,
   clickedPlacementCell: undefined,

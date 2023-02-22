@@ -8,7 +8,7 @@ import {
     setRotateX,
     setShipType,
 } from '../store/slices/gameStateSlice';
-import { sizes } from '../util/types';
+import {ShipType, sizes} from '../util/types';
 import { useMutation } from '@apollo/client';
 import { SET_USERS_SHIPS } from '../graphql/queries';
 import { removeTypeNameFromGQLResult } from '../util/Utils';
@@ -20,8 +20,8 @@ const ShipSelection = ({ gameData, user, gameId }) => {
   const phase = useSelector(getPhase);
   const [mutate, { loading, error }] = useMutation(SET_USERS_SHIPS);
 
-  const onClickShipSize = (size: 'smallShip' | 'mediumShip' | 'largeShip') => {
-    dispatch(setShipType({ sizeName: size, sizeNum: sizes[size].length }));
+  const onClickShipSize = (ship: ShipType) => {
+    dispatch(setShipType(ship));
   };
 
   const onClickPost = () => {

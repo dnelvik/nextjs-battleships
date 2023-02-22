@@ -5,25 +5,21 @@ export type Coordinates = {
 
 export type CellType = {
   coordinates: Coordinates;
-  isHit?: boolean;
+  shipType: ShipType;
+  isHit: boolean;
 };
 
 export type Player = {
   name: string;
-  smallShip: Ship;
-  mediumShip: Ship;
-  largeShip: Ship;
+  cells: CellType[];
 };
 
 export type Ship = {
-  cells: CellType[];
+  cells: CellType[] | [];
   isSunk?: boolean;
 };
 
-export type ShipType = {
-  sizeName: 'smallShip' | 'mediumShip' | 'largeShip';
-  sizeNum: number;
-};
+export type ShipType = 'smallShip' | 'mediumShip' | 'largeShip';
 
 export type Game = {
   _id: string;

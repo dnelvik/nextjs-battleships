@@ -9,7 +9,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    setShips(gameId: ID!, playerShips: GameInput!): Game
+    setCells(gameId: ID!, playerShips: GameInput!): Game
     createGame(newGame: GameInput!): Game
   }
 
@@ -20,19 +20,13 @@ const typeDefs = gql`
 
   type Cell {
     coordinates: Coordinates
+    shipType: String
     isHit: Boolean
-  }
-
-  type Ship {
-    cells: [Cell]!
-    isSunk: Boolean
   }
 
   type Player {
     name: String!
-    smallShip: Ship!
-    mediumShip: Ship!
-    largeShip: Ship!
+    cells: [Cell]
   }
 
   type Game {
@@ -48,19 +42,13 @@ const typeDefs = gql`
 
   input CellInput {
     coordinates: CoordinatesInput
+    shipType: String
     isHit: Boolean
-  }
-
-  input ShipInput {
-    cells: [CellInput]
-    isSunk: Boolean
   }
 
   input PlayerInput {
     name: String!
-    smallShip: ShipInput!
-    mediumShip: ShipInput!
-    largeShip: ShipInput!
+    cells: [CellInput]
   }
 
   input GameInput {

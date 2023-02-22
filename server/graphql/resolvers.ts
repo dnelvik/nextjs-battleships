@@ -24,8 +24,9 @@ const resolvers = {
   },
 
   Mutation: {
-    async setShips(parent: any, args: any) {
-      return await Game.findByIdAndUpdate(args.gameId, args.playerShips);
+    async setCells(parent: any, args: any) {
+      // console.log(Game.findById(args.gameId).schema.paths['playersTurn']);
+      await Game.findByIdAndUpdate(args.gameId, args.playerShips);
     },
 
     async createGame(parent: any, args: any) {

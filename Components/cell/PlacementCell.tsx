@@ -12,12 +12,12 @@ import {
   setBlocked,
   setHoveredPlacementCell,
   setIsPlacing,
-  getPhase,
+  getPhase, getCurrentShipCells
 } from '../../store/slices/gameStateSlice';
 import { CellType, Coordinates } from '../../util/types';
 import {
   checkIfCellIsIncludedInShip,
-  doesShipsContainCoordinates,
+  doesShipContainCoordinates,
   equalCoordinates,
 } from '../../util/Utils';
 import Cell from './Cell';
@@ -48,11 +48,11 @@ const PlacementCell = ({
   const allActiveCells = useSelector(getAllActiveCells);
   const [isClicked, setIsClicked] = React.useState(false);
   const [isHovered, setIsHovered] = React.useState(false);
-  let currentShip = player[shipType?.sizeName];
-  const currentCell: CellType = { coordinates: { x, y }, isHit: false };
-  let currentCellIsActiveInCurrentShip = doesShipsContainCoordinates(
+  const currentShip = useSelector(getCurrentShipCells);
+  const currentCoordinates: Coordinates = { x, y };
+  let currentCellIsActiveInCurrentShip = doesShipContainCoordinates(
     currentShip,
-    currentCell.coordinates
+    currentCoordinates
   );
 
   // Sets active cells to clicked if game is already active
@@ -60,7 +60,7 @@ const PlacementCell = ({
     if (phase === 'Attack') {
       const currentCellIsActive: boolean =
         allActiveCells?.filter((e) =>
-          equalCoordinates(currentCell.coordinates, e.coordinates)
+          equalCoordinates(currentCoordinates, e.coordinates)
         ).length > 0;
       currentCellIsActive && setIsClicked(true);
     }
@@ -70,14 +70,14 @@ const PlacementCell = ({
   React.useMemo(() => {
     const currentCellIsActive: boolean =
       allActiveCells?.filter((e) =>
-        equalCoordinates(currentCell.coordinates, e.coordinates)
+        equalCoordinates(currentCoordinates, e.coordinates)
       ).length > 0;
     if (
       clickedCell &&
       checkIfCellIsIncludedInShip(
         shipType,
         clickedCell,
-        currentCell.coordinates,
+        currentCoordinates,
         rotateX
       ) &&
       !isClicked
@@ -96,7 +96,7 @@ const PlacementCell = ({
       checkIfCellIsIncludedInShip(
         shipType,
         hoveredCell,
-        currentCell.coordinates,
+        currentCoordinates,
         rotateX
       )
     ) {
@@ -111,12 +111,11 @@ const PlacementCell = ({
 
   const onClick = () => {
     if (!blocked && phase === 'Placement') {
-      setClickedCell(currentCell.coordinates);
+      setClickedCell(currentCoordinates);
     }
   };
 
   const setStyle = () => {
-
     if (!isHovered) {
       return isClicked ? styles.cell__clicked : styles.cell__clean;
     } else if (!isClicked) {
@@ -136,7 +135,7 @@ const PlacementCell = ({
 
   const onHover = (enter: boolean) => {
     if (enter) {
-      dispatch(setHoveredPlacementCell(currentCell.coordinates));
+      dispatch(setHoveredPlacementCell(currentCoordinates));
     } else {
       dispatch(setBlocked(false));
       dispatch(setIsPlacing(false));

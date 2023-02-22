@@ -7,20 +7,14 @@ const CoordinatesSchema = new Schema({
 
 const CellSchema = new Schema({
   coordinates: CoordinatesSchema,
+  shipType: String,
   isHit: Boolean,
-});
-
-const ShipSchema = new Schema({
-  cells: [CellSchema],
-  isSunk: Boolean,
 });
 
 const PlayerSchema = new Schema(
   {
     name: String,
-    smallShip: ShipSchema,
-    mediumShip: ShipSchema,
-    largeShip: ShipSchema,
+    cells: [CellSchema]
   },
   { collection: 'Battleships' }
 );

@@ -3,14 +3,10 @@ import { useDispatch, useSelector } from '../../store/store';
 import {
   getAllActiveCells,
   getRotateX,
-  getPlayer,
   getShipType,
-  setLargeShipsPlayer,
-  setMediumShipsPlayer,
-  setSmallShipsPlayer,
+  setCells,
 } from '../../store/slices/gameStateSlice';
-import { Coordinates, Ship } from '../../util/types';
-import { doesShipsOverlap, equalCoordinates } from '../../util/Utils';
+import {CellType, Coordinates, sizes} from '../../util/types';
 import PlacementCell from '../cell/PlacementCell';
 import GridRenderer from './GridRenderer';
 
@@ -47,7 +43,7 @@ const createPlacementGrid = (
 const PlacementGrid = ({ mapSize }: Props) => {
   const dispatch = useDispatch();
   const shipType = useSelector(getShipType);
-  const player = useSelector(getPlayer);
+  const shipSize = sizes[shipType].length;
   const allActiveCells = useSelector(getAllActiveCells);
   const rotateX = useSelector(getRotateX);
   const initialClicked: Coordinates = { x: -1, y: -1 };
@@ -62,50 +58,43 @@ const PlacementGrid = ({ mapSize }: Props) => {
     activeCells
   );
 
-  const saveShipPlacementToStore = (cell: Ship) => {
-    const currentShip = player[shipType?.sizeName];
-    if (
-      !doesShipsOverlap(currentShip, cell) &&
-      allActiveCells.some((e) =>
-        cell.cells.some((x) => equalCoordinates(x.coordinates, e.coordinates))
-      )
-    ) {
-      return;
-    }
-    if (shipType?.sizeName === 'smallShip') {
-      dispatch(setSmallShipsPlayer(cell));
-    } else if (shipType?.sizeName === 'mediumShip') {
-      dispatch(setMediumShipsPlayer(cell));
-    } else if (shipType?.sizeName === 'largeShip') {
-      dispatch(setLargeShipsPlayer(cell));
+  const saveShipPlacementToStore = (clickedCells: CellType[]) => {
+    if (allActiveCells?.length) {
+      const allCellsWithoutSelectedShip = allActiveCells.filter(cell => cell.shipType !== shipType).concat(clickedCells);
+      dispatch(setCells(allCellsWithoutSelectedShip));
+    } else {
+      dispatch(setCells(clickedCells));
     }
   };
 
   React.useMemo(() => {
     if (clickedCell) {
       // Create an array with all cell position based off coordinates of clicked cell and size/rotation of chosen ship
-      let newArr: Coordinates[] = [];
-      for (let i = 0; i < shipType.sizeNum; i++) {
-        newArr.push({
+      let newCoordinates: Coordinates[] = [];
+      for (let i = 0; i < shipSize; i++) {
+        newCoordinates.push({
           x: rotateX
-            ? clickedCell.x - shipType.sizeNum < 0
+            ? clickedCell.x - shipSize < 0
               ? i
               : clickedCell.x - i
             : clickedCell.x,
           y: rotateX
             ? clickedCell.y
-            : clickedCell.y - shipType.sizeNum < 0
+            : clickedCell.y - shipSize < 0
             ? i
             : clickedCell.y - i,
         });
       }
-      const setCell: Ship = {
-        cells: newArr.map((e) => {
-          return { coordinates: e };
-        }),
-      };
-      saveShipPlacementToStore(setCell);
-      setActiveCells(newArr);
+      const newCells: CellType[] =
+        newCoordinates.map((coordinate) => {
+          return {
+            coordinates: coordinate,
+            shipType: shipType,
+            isHit: false
+          };
+        });
+      saveShipPlacementToStore(newCells);
+      setActiveCells(newCoordinates);
     }
   }, [clickedCell]);
 

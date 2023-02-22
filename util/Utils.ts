@@ -1,4 +1,4 @@
-import { Coordinates, Ship, ShipType, sizes } from './types';
+import {CellType, Coordinates, ShipType, sizes} from './types';
 
 export const equalCoordinates = (
   coords1: Coordinates,
@@ -7,22 +7,11 @@ export const equalCoordinates = (
   return coords1?.x === coords2?.x && coords1?.y === coords2?.y;
 };
 
-export const doesShipsOverlap = (ship1: Ship, ship2: Ship) => {
-  if (!ship1 || !ship2) {
+export const doesShipContainCoordinates = (currentShipCells: CellType[], currentCoords: Coordinates) => {
+  if (!currentShipCells || !currentCoords) {
     return;
   }
-  const ship1Cells = ship1.cells;
-  const ship2Cells = ship2.cells;
-  return ship1Cells.some((e) =>
-    ship2Cells.some((x) => equalCoordinates(x.coordinates, e.coordinates))
-  );
-};
-
-export const doesShipsContainCoordinates = (ship: Ship, coord: Coordinates) => {
-  if (!ship || !coord) {
-    return;
-  }
-  return ship.cells.some((e) => equalCoordinates(e.coordinates, coord));
+  return currentShipCells.some((e) => equalCoordinates(e.coordinates, currentCoords));
 };
 
 export const checkIfCellIsIncludedInShip = (
@@ -31,15 +20,16 @@ export const checkIfCellIsIncludedInShip = (
   currentCell: Coordinates,
   rotateX: boolean
 ) => {
+  const shipSize = sizes[shipType].length;
   const clickedCellAngle = rotateX ? activeCell?.x : activeCell?.y;
   const currentCellAngle = rotateX ? currentCell.x : currentCell.y;
   const clickedCellOtherAngle = !rotateX ? activeCell?.x : activeCell?.y;
   const currentCellOtherAngle = !rotateX ? currentCell.x : currentCell.y;
   return (
     clickedCellOtherAngle === currentCellOtherAngle &&
-    (sizes[shipType?.sizeName]?.includes(clickedCellAngle - currentCellAngle) ||
-      (clickedCellAngle + 1 - shipType.sizeNum < 0 &&
-        sizes[shipType?.sizeName]?.includes(currentCellAngle)))
+    (sizes[shipType]?.includes(clickedCellAngle - currentCellAngle) ||
+      (clickedCellAngle + 1 - shipSize < 0 &&
+        sizes[shipType]?.includes(currentCellAngle)))
   );
 };
 
@@ -51,3 +41,25 @@ export const removeTypeNameFromGQLResult = (result: Record<string, any>) => {
     })
   );
 };
+
+export const getUsersData = (gameData: any, user: string) => {
+  if (!gameData || !user) {
+    return;
+  }
+  return gameData.players.filter(player => player.name === user)[0];
+}
+
+export const getEnemyData = (gameData: any, user: string) => {
+  if (!gameData || !user) {
+    return;
+  }
+  return gameData.players.filter(player => player.name !== user)[0];
+}
+
+export const isShipSunk = (shipType: ShipType, cells: CellType[]) => {
+  return cells.filter(cell => cell.shipType === shipType && !cell.isHit).length > 0;
+}
+
+export const isEveryShipSunk = (cells: CellType[]) => {
+  return cells.every(cell => cell.isHit);
+}
