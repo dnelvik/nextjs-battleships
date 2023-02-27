@@ -14,7 +14,7 @@ const CellSchema = new Schema({
 const PlayerSchema = new Schema(
   {
     name: String,
-    cells: [CellSchema]
+    cells: [CellSchema],
   },
   { collection: 'Battleships' }
 );

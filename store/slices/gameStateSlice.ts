@@ -1,5 +1,5 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
-import {Coordinates, Player, ShipType} from '../../util/types';
+import { Coordinates, Player, ShipType } from '../../util/types';
 import { initialState } from '../initialState';
 
 export interface GameState {
@@ -28,8 +28,8 @@ export const gameStateSlice = createSlice({
       state.player = action.payload;
     },
     setCells: (
-        state: Draft<typeof initialState>,
-        action: PayloadAction<typeof initialState.player.cells>
+      state: Draft<typeof initialState>,
+      action: PayloadAction<typeof initialState.player.cells>
     ) => {
       state.player.cells = action.payload;
     },
@@ -98,10 +98,10 @@ export const gameStateSlice = createSlice({
 
 export const getPlayer = (state: { gameState: GameState }) =>
   state.gameState.player;
-export const getCurrentShipCells = (
-  state: { gameState: GameState }
-) =>
-  state.gameState.player.cells?.filter(cell => cell.shipType === state.gameState.shipType);
+export const getCurrentShipCells = (state: { gameState: GameState }) =>
+  state.gameState.player.cells?.filter(
+    (cell) => cell.shipType === state.gameState.shipType
+  );
 export const getPlayersTurn = (state: { gameState: GameState }) =>
   state.gameState.playersTurn;
 export const getPhase = (state: { gameState: GameState }) =>
@@ -119,7 +119,7 @@ export const getPlacementConfirmed = (state: { gameState: GameState }) =>
 export const getRotateX = (state: { gameState: GameState }) =>
   state.gameState.rotateX;
 export const getAllActiveCells = (state: { gameState: GameState }) => {
-  return state.gameState.player.cells
+  return state.gameState.player.cells;
 };
 export const getIsPlacing = (state: { gameState: GameState }) => {
   return state.gameState.isPlacing;

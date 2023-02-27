@@ -6,7 +6,7 @@ import {
   getShipType,
   setCells,
 } from '../../store/slices/gameStateSlice';
-import {CellType, Coordinates, sizes} from '../../util/types';
+import { CellType, Coordinates, sizes } from '../../util/types';
 import PlacementCell from '../cell/PlacementCell';
 import GridRenderer from './GridRenderer';
 
@@ -60,7 +60,9 @@ const PlacementGrid = ({ mapSize }: Props) => {
 
   const saveShipPlacementToStore = (clickedCells: CellType[]) => {
     if (allActiveCells?.length) {
-      const allCellsWithoutSelectedShip = allActiveCells.filter(cell => cell.shipType !== shipType).concat(clickedCells);
+      const allCellsWithoutSelectedShip = allActiveCells
+        .filter((cell) => cell.shipType !== shipType)
+        .concat(clickedCells);
       dispatch(setCells(allCellsWithoutSelectedShip));
     } else {
       dispatch(setCells(clickedCells));
@@ -85,14 +87,13 @@ const PlacementGrid = ({ mapSize }: Props) => {
             : clickedCell.y - i,
         });
       }
-      const newCells: CellType[] =
-        newCoordinates.map((coordinate) => {
-          return {
-            coordinates: coordinate,
-            shipType: shipType,
-            isHit: false
-          };
-        });
+      const newCells: CellType[] = newCoordinates.map((coordinate) => {
+        return {
+          coordinates: coordinate,
+          shipType: shipType,
+          isHit: false,
+        };
+      });
       saveShipPlacementToStore(newCells);
       setActiveCells(newCoordinates);
     }

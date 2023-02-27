@@ -3,23 +3,26 @@ import { Player } from '../util/types';
 
 export const initialPlayer: Player = {
   name: '',
-  cells: []
+  cells: [],
 };
 
-export const createModelFromInitialPlayer = (player: string, opponent: string) => {
+export const createModelFromInitialPlayer = (
+  player: string,
+  opponent: string
+) => {
   return {
     players: [
       {
         ...initialPlayer,
-        name: player
+        name: player,
       },
       {
         ...initialPlayer,
-        name: opponent
-      }
+        name: opponent,
+      },
     ],
-    playersTurn: player
-  }
+    playersTurn: player,
+  };
 };
 
 export const initialState: GameState = {

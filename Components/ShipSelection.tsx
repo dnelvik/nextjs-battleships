@@ -2,13 +2,14 @@ import React from 'react';
 import styles from '../styles/Grid.module.scss';
 import { useDispatch, useSelector } from '../store/store';
 import {
-    getPhase,
-    getPlayer,
-    getRotateX, setPhase,
-    setRotateX,
-    setShipType,
+  getPhase,
+  getPlayer,
+  getRotateX,
+  setPhase,
+  setRotateX,
+  setShipType,
 } from '../store/slices/gameStateSlice';
-import {ShipType, sizes} from '../util/types';
+import { ShipType } from '../util/types';
 import { useMutation } from '@apollo/client';
 import { SET_USERS_SHIPS } from '../graphql/queries';
 import { removeTypeNameFromGQLResult } from '../util/Utils';
@@ -18,36 +19,35 @@ const ShipSelection = ({ gameData, user, gameId }) => {
   const rotate = useSelector(getRotateX);
   const player = useSelector(getPlayer);
   const phase = useSelector(getPhase);
-  const [mutate, { loading, error }] = useMutation(SET_USERS_SHIPS);
+  const [mutate] = useMutation(SET_USERS_SHIPS);
 
   const onClickShipSize = (ship: ShipType) => {
     dispatch(setShipType(ship));
   };
 
   const onClickPost = () => {
-      if (phase === 'Placement') {
-          const newPlayers = gameData?.players.map((p: any) =>
-              p.name === user ? player : p
-          );
-          const otherPlayersName = gameData?.players.find(
-              (p: any) => p.name !== user
-          ).name;
-          const newGame = {
-              ...gameData,
-              players: newPlayers,
-              playersTurn: otherPlayersName,
-          };
+    if (phase === 'Placement') {
+      const newPlayers = gameData?.players.map((p: any) =>
+        p.name === user ? player : p
+      );
+      const otherPlayersName = gameData?.players.find(
+        (p: any) => p.name !== user
+      ).name;
+      const newGame = {
+        ...gameData,
+        players: newPlayers,
+        playersTurn: otherPlayersName,
+      };
 
-          const newVar = removeTypeNameFromGQLResult(newGame);
-          mutate({
-              variables: {
-                  gameId,
-                  playerShips: newVar,
-              },
-          }).then(() => dispatch(setPhase('Attack')));
-      } else {
-
-      }
+      const newVar = removeTypeNameFromGQLResult(newGame);
+      mutate({
+        variables: {
+          gameId,
+          playerShips: newVar,
+        },
+      }).then(() => dispatch(setPhase('Attack')));
+    } else {
+    }
   };
 
   return (

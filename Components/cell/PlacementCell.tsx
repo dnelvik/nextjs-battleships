@@ -12,9 +12,10 @@ import {
   setBlocked,
   setHoveredPlacementCell,
   setIsPlacing,
-  getPhase, getCurrentShipCells
+  getPhase,
+  getCurrentShipCells,
 } from '../../store/slices/gameStateSlice';
-import { CellType, Coordinates } from '../../util/types';
+import { Coordinates } from '../../util/types';
 import {
   checkIfCellIsIncludedInShip,
   doesShipContainCoordinates,
@@ -120,7 +121,7 @@ const PlacementCell = ({
       return isClicked ? styles.cell__clicked : styles.cell__clean;
     } else if (!isClicked) {
       if (phase === 'Attack') {
-        return styles.cell__blocked
+        return styles.cell__blocked;
       }
       return isHovered ? styles.cell__hover : styles.cell__clean;
     } else {

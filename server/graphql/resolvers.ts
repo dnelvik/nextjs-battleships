@@ -30,7 +30,10 @@ const resolvers = {
     },
 
     async createGame(parent: any, args: any) {
-      return await Game.create(args.newGame, (error: any) => error && console.log(error));
+      return await Game.create(
+        args.newGame,
+        (error: any) => error && console.log(error)
+      );
     },
   },
 };

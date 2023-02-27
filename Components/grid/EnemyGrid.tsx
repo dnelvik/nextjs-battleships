@@ -9,12 +9,26 @@ interface Props {
   gameData: any;
 }
 
-const createEnemyGrid = (mapSize: number, gameData: any, user: string, gameId: any) => {
+const createEnemyGrid = (
+  mapSize: number,
+  gameData: any,
+  user: string,
+  gameId: any
+) => {
   let gridArray = Array(mapSize);
   for (let x = 0; x < mapSize; x++) {
     gridArray[x] = Array(mapSize);
     for (let y = 0; y < mapSize; y++) {
-      gridArray[x][y] = <AttackCell key={`${x}${y}`} gameData={gameData} user={user} x={x} y={y} gameId={gameId}/>;
+      gridArray[x][y] = (
+        <AttackCell
+          key={`${x}${y}`}
+          gameData={gameData}
+          user={user}
+          x={x}
+          y={y}
+          gameId={gameId}
+        />
+      );
     }
   }
   return gridArray;
